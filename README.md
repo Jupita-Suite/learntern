@@ -1,0 +1,22 @@
+# LearnTern
+
+Static site (Node build) + Vercel serverless forms/checkout. Deploy: push to GitHub, import repo in Vercel (build `node build.mjs`, output `dist`).
+
+## Edit content
+- `data/articles.mjs` – articles. `data/site.mjs` – prices, emails, social links, products, courses.
+- `node build.mjs` then open `dist/`.
+
+## Must be configured before launch
+| Item | Where |
+|---|---|
+| Domain + `SITE_URL` | Vercel env |
+| Product prices (NGN) | `data/site.mjs` (`price`) |
+| Paystack account approval + `PAYSTACK_SECRET_KEY`, webhook -> `/api/paystack-webhook` | Vercel env / Paystack |
+| `DOWNLOAD_SECRET`, `FILE_URL_CREDIT_RISK_101` (etc.) private file URLs | Vercel env |
+| Email: `RESEND_API_KEY`, `EMAIL_FROM`, `OWNER_EMAIL`, `RESEND_AUDIENCE_ID`, `FREE_GUIDE_URL` | Vercel env |
+| Real emails and social URLs | `data/site.mjs` |
+| GA4 `GA4_ID` / GTM `GTM_ID`; Search Console verification | Vercel env |
+| Author bio and credentials (verified only) | About page |
+| Legal pages (drafts) | legal review |
+| Customer accounts / order history | auth provider needed |
+| Interview Pack, Bundle covers and files; sample downloads | to produce |
