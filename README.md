@@ -10,8 +10,8 @@ Static site (Node build) + Vercel serverless forms/checkout. Deploy: push to Git
 | Item | Where |
 |---|---|
 | Domain + `SITE_URL` | Vercel env |
-| Product prices (NGN) | `data/site.mjs` (`price`) |
-| Paystack account approval + `PAYSTACK_SECRET_KEY`, webhook -> `/api/paystack-webhook` | Vercel env / Paystack |
+| Product prices (NGN) | `data/site.mjs` (`price`). Credit Risk 101 is set to 12,500. Others still unpriced |
+| Paystack account approval + `PAYSTACK_SECRET_KEY`, webhook -> `https://<your-domain>/api/paystack-webhook` | Vercel env / Paystack dashboard (Settings > API Keys & Webhooks) |
 | `DOWNLOAD_SECRET`, `FILE_URL_CREDIT_RISK_101` (etc.) private file URLs | Vercel env |
 | Email: `RESEND_API_KEY`, `EMAIL_FROM`, `OWNER_EMAIL`, `RESEND_AUDIENCE_ID`, `FREE_GUIDE_URL` | Vercel env |
 | Real emails and social URLs | `data/site.mjs` |
