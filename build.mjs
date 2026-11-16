@@ -217,7 +217,7 @@ write("/books/", layout({
   path: "/books/", title: "Books & Resources", desc: "Credit risk books, interview preparation packs and practical templates from LearnTern.",
   hero: pageHero("Books &amp; Resources", "Books &amp; Resources", "Professional guides and practical toolkits to help you learn, practise and prepare."),
   body: `<section class="section"><div class="wrap"><div class="grid g3">${products.map(productCard).join("")}</div>
-  <p class="fineprint" style="margin-top:28px"><span class="pill-note">Placeholder</span> Prices will be shown in Nigerian Naira (NGN). Additional currencies can be added later, subject to payment provider setup.</p></div></section>`,
+  <p class="fineprint" style="margin-top:28px">All prices are in Nigerian Naira (NGN). Payments are processed securely by Paystack.${products.some((p) => !p.price) ? " Pricing for remaining products will be announced soon." : ""}</p></div></section>`,
 }));
 for (const p of products) {
   write(`/books/${p.slug}/`, layout({
@@ -231,8 +231,8 @@ for (const p of products) {
       <form class="form" data-endpoint="/api/checkout" data-source="product-${p.slug}" novalidate><input type="hidden" name="product" value="${p.slug}"><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
        <div class="row2"><div class="field"><label for="n">Full name</label><input id="n" name="name" required autocomplete="name"></div><div class="field"><label for="e">Email for your download link</label><input id="e" name="email" type="email" required autocomplete="email"></div></div>
        <button class="btn btn-gold" type="submit">Buy Now</button><p class="form-msg" role="status" aria-live="polite"></p></form>
-      <p class="fineprint" style="margin-top:12px">Secure payment in NGN via Paystack once enabled. You receive an order confirmation and a secure download link by email. See our <a href="/refund-policy/">refund policy</a>.</p>
-      <div class="notice"><strong>Setup required:</strong> checkout activates once pricing and Paystack keys are configured.</div></div>
+      <p class="fineprint" style="margin-top:12px">${p.price ? "Secure payment in NGN via Paystack (card, bank transfer or USSD). After payment, a secure download link is sent to your email." : "Secure payment in NGN via Paystack once enabled. You receive an order confirmation and a secure download link by email."} See our <a href="/refund-policy/">refund policy</a>.</p>
+      ${p.price ? "" : `<div class="notice"><strong>Coming soon:</strong> this product is not yet available to purchase.</div>`}</div>
      <h2>What's included</h2><ul class="checklist">${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
      <h2>Who should buy it</h2><ul class="checklist">${p.audience.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
      <h2>Preview</h2><p>Want a taste first? Request a free sample from the Free Guide on the <a href="/">homepage</a>, or <a href="/contact/">contact us</a>. <span class="pill-note">Sample file to be uploaded</span></p>

@@ -19,7 +19,7 @@ export const products = [
     subtitle: "Breaking Into Credit Risk Management: A Practical Career and Interview Guide for the Nigerian Lending Market.",
     short: "A practical guide for graduates, aspiring credit analysts, loan officers and professionals looking to build or advance a career in credit risk management.",
     format: "Ebook (PDF)",
-    price: null, // PLACEHOLDER: set the price in NGN (number), e.g. 15000
+    price: 12500, // NGN (whole naira). Converted to kobo (x100) for Paystack in api/checkout.js.
     pricePlaceholder: "₦ — price to be confirmed",
     image: "/assets/credit-risk-101.webp",
     featured: true,

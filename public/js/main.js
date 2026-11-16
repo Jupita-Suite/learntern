@@ -32,6 +32,20 @@
     });
   });
 
+  // Paystack return: Paystack redirects back with ?checkout=return&reference=...; show the real payment status.
+  (function(){
+    var qs=new URLSearchParams(location.search),ref=qs.get('reference')||qs.get('trxref'),box=document.querySelector('.buy-box');
+    if(qs.get('checkout')!=='return'||!ref||!box)return;
+    var note=document.createElement('p');note.className='form-msg';note.setAttribute('role','status');note.textContent='Confirming your payment…';
+    box.insertBefore(note,box.firstChild);
+    fetch('/api/verify?reference='+encodeURIComponent(ref)).then(function(r){return r.json()}).then(function(j){
+      if(j.status==='success'){note.className='form-msg ok';note.textContent='Payment received. Thank you! Your download link is being emailed to you (check spam if it does not arrive in a few minutes).';
+        if(window.dataLayer)window.dataLayer.push({event:'purchase',reference:ref});}
+      else if(j.status==='abandoned'||j.status==='failed'){note.className='form-msg err';note.textContent='Your payment was not completed. You have not been charged. Please try again.'}
+      else{note.className='form-msg';note.textContent='We are still confirming your payment. If you were charged, your download link will be emailed shortly.'}
+    }).catch(function(){note.className='form-msg';note.textContent='We could not confirm your payment status right now. If you were charged, your download link will be emailed shortly.'});
+  })();
+
   // Learn library: search, filter, pagination
   var lib=document.getElementById('library');
   if(lib){
