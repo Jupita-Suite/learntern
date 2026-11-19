@@ -3,7 +3,7 @@ import { json, validEmail, clean, sendEmail, esc } from './_lib.js';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
   const b = req.body || {};
-  if (b.website) return json(res, 200, { message: 'Thank you.' });
+  if (b.hp_extra) return json(res, 200, { message: 'Thank you.' });
   const name = clean(b.name, 120), email = clean(b.email, 254), message = clean(b.message, 4000);
   if (!name || !validEmail(email) || !message) return json(res, 400, { error: 'Please complete your name, a valid email and your message.' });
   if (!process.env.OWNER_EMAIL) return json(res, 503, { error: 'The contact form is not switched on yet. Please email us directly.' });
