@@ -3,7 +3,7 @@ import { json, validEmail, clean, sendEmail, esc } from './_lib.js';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
   const b = req.body || {};
-  if (b.website) return json(res, 200, { message: 'Thank you.' }); // honeypot
+  if (b.hp_extra) return json(res, 200, { message: 'Thank you.' }); // honeypot
   const email = clean(b.email, 254).toLowerCase(), firstName = clean(b.firstName, 80);
   if (!validEmail(email)) return json(res, 400, { error: 'Please enter a valid email address.' });
   if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM)
