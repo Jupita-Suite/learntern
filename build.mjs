@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync, cpSync, rmSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { site, products, courses } from "./data/site.mjs";
 import { articles, categories } from "./data/articles.mjs";
+import { refundPolicy, refundUpdated } from "./data/refund-policy.mjs";
 
 const OUT = "dist";
 rmSync(OUT, { recursive: true, force: true });
@@ -95,7 +96,7 @@ ${!site.gtmId && site.gaId ? `<script async src="https://www.googletagmanager.co
 <div class="social" aria-label="Social media">${[["linkedin", "in"], ["x", "X"], ["instagram", "ig"], ["youtube", "yt"]].map(([k, t]) => `<a href="${site.social[k]}" aria-label="LearnTern on ${k}" rel="noopener">${t}</a>`).join("")}</div></div>
 <div><h4>Platform</h4><ul><li><a href="/about/">About LearnTern</a></li><li><a href="/learn/">Learn</a></li><li><a href="/books/">Books &amp; Resources</a></li><li><a href="/interview-preparation/">Interview Preparation</a></li><li><a href="/courses/">Courses</a></li></ul></div>
 <div><h4>Business</h4><ul><li><a href="/corporate-training/">Corporate Training</a></li><li><a href="/contact/">Contact</a></li><li><a href="/account/">Customer Account</a></li></ul></div>
-${""/* Legal column hidden for now: <div><h4>Legal</h4><ul><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li><li><a href="/refund-policy/">Refund Policy</a></li></ul></div> */}
+<div><h4>Legal</h4><ul><li><a href="/refund-policy/">Refund Policy</a></li>${""/* Privacy Policy and Terms hidden for now: <li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li> */}</ul></div>
 </div><div class="foot-bottom"><span>© ${new Date().getFullYear()} LearnTern. All rights reserved.</span><span>Educational content only. Not financial, legal or regulatory advice.</span></div></div></footer>
 <script src="/js/main.js" defer></script></body></html>`;
 }
@@ -239,11 +240,10 @@ for (const p of products) {
       <form class="form" data-endpoint="/api/checkout" data-source="product-${p.slug}" novalidate><input type="hidden" name="product" value="${p.slug}"><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
        <div class="row2"><div class="field"><label for="n">Full name</label><input id="n" name="name" required autocomplete="name"></div><div class="field"><label for="e">Email for your download link</label><input id="e" name="email" type="email" required autocomplete="email"></div></div>
        <button class="btn btn-gold" type="submit">Buy Now</button><p class="form-msg" role="status" aria-live="polite"></p></form>
-      <p class="fineprint" style="margin-top:12px">${p.price ? "Secure payment in NGN via Paystack (card, bank transfer or USSD). After payment, a secure download link is sent to your email." : "Secure payment in NGN via Paystack once enabled. You receive an order confirmation and a secure download link by email."}</p>
+      <p class="fineprint" style="margin-top:12px">${p.price ? "Secure payment in NGN via Paystack (card, bank transfer or USSD). After payment, a secure download link is sent to your email." : "Secure payment in NGN via Paystack once enabled. You receive an order confirmation and a secure download link by email."} See our <a href="/refund-policy/">refund policy</a>.</p>
       ${p.price ? "" : `<div class="notice"><strong>Coming soon:</strong> this product is not yet available to purchase.</div>`}</div>
      <h2>What's included</h2><ul class="checklist">${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
      <h2>Who should buy it</h2><ul class="checklist">${p.audience.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
-     <h2>Preview</h2><p>Want a taste first? Request a free sample from the Free Guide on the <a href="/">homepage</a>, or <a href="/contact/">contact us</a>. <span class="pill-note">Sample file to be uploaded</span></p>
     </div></div></section>`,
   }));
 }
@@ -320,11 +320,19 @@ write("/account/", layout({
   body: `<section class="section"><div class="wrap prose"><h2>Accounts are coming soon</h2><p>Until customer accounts launch, your download link is sent to the email address used at checkout. If you cannot find it, <a href="/contact/">contact support</a> with your order email.</p></div></section>`,
 }));
 
-/* ---------- LEGAL (hidden for now: Privacy Policy, Terms, Refund Policy. Remove the "// " prefixes to restore) ---------- */
+/* ---------- REFUND POLICY ---------- */
+const emailLink = (t) => esc(t).replace(site.email, `<a href="mailto:${site.email}">${site.email}</a>`);
+const renderBlock = (b) => (b.h3 ? `<h3>${esc(b.h3)}</h3>` : b.ul ? `<ul>${b.ul.map((i) => `<li>${emailLink(i)}</li>`).join("")}</ul>` : `<p>${emailLink(b.p)}</p>`);
+write("/refund-policy/", layout({
+  path: "/refund-policy/", title: "Refund Policy", desc: "LearnTern's refund policy: eligibility, how to request a refund, review and processing times.",
+  hero: pageHero("Refund Policy", "Refund Policy", ""),
+  body: `<section class="section"><div class="wrap prose">${refundPolicy.map((sec) => `<h2>${esc(sec.h)}</h2>${sec.body.map(renderBlock).join("")}`).join("")}<p class="fineprint">Last updated ${fmtDate(refundUpdated)}.</p></div></section>`,
+}));
+
+/* ---------- LEGAL (Privacy Policy and Terms hidden for now. Remove the "// " prefixes to restore) ---------- */
 // const legal = (path, title, paras) => write(path, layout({ path, title, desc: `${title} for LearnTern.`, hero: pageHero(title, title, ""), body: `<section class="section"><div class="wrap prose"><p><span class="pill-note">Draft: requires legal review before launch</span></p>${paras.map(([h, p]) => `<h2>${h}</h2><p>${p}</p>`).join("")}<p class="fineprint">Last updated ${fmtDate("2026-11-16")}.</p></div></section>` }));
 // legal("/privacy-policy/", "Privacy Policy", [["What we collect", "Details you provide through forms (name, email, enquiry content) and standard analytics data if analytics is enabled."], ["How we use it", "To deliver purchases and free resources, respond to enquiries, send updates you request and improve the site. You can unsubscribe at any time."], ["Your rights", "You may request access, correction or deletion of your personal data. Contact us using the details on the Contact page. This policy should be aligned with the Nigeria Data Protection Act and, when expanding, UK/EU GDPR."]]);
 // legal("/terms/", "Terms and Conditions", [["Use of the site", "Content is provided for general education and is not financial, legal or regulatory advice."], ["Digital products", "Purchases are licensed for personal use. Redistribution, resale or sharing of download links is not permitted."], ["Liability", "To be completed with legal advice."]]);
-// legal("/refund-policy/", "Refund Policy", [["Digital downloads", "Because digital products are delivered immediately, refund terms must be defined here. Suggested starting point: refunds considered for faulty or undeliverable files, requested within a stated number of days."], ["How to request", `Email ${site.supportEmail} with your order details.`]]);
 
 /* ---------- 404 + favicon + SEO files ---------- */
 writeFileSync(join(OUT, "404.html"), layout({ path: "/404", title: "Page not found", desc: "Page not found.", noindex: true, hero: pageHero("404", "Page not found", "The page you're looking for doesn't exist or has moved."), body: `<section class="section"><div class="wrap"><a class="btn btn-navy" href="/">Back to homepage</a> <a class="btn btn-outline" href="/learn/">Browse articles</a></div></section>` }));
