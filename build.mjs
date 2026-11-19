@@ -57,7 +57,7 @@ const articleCard = (a) => `<article class="card" data-title="${esc(a.title)}" d
   <h3><a class="card-link" href="/learn/${a.slug}/">${esc(a.title)}</a></h3><p>${esc(a.excerpt)}</p><span class="link-arrow">Read Article</span></article>`;
 
 const productMedia = (p, mini = false) =>
-  p.image ? `<img class="product-img" src="${p.image}" alt="${esc(p.name)} book cover" width="600" height="800" loading="lazy">`
+  p.image ? `<img class="product-img" src="${p.image}" alt="${esc(p.name)} book cover" width="1000" height="1073" loading="lazy">`
   : `<div class="mini-cover" role="img" aria-label="${esc(p.name)} cover (placeholder design)"><small>${esc(p.cover.kicker)}</small><strong>${esc(p.cover.title)}</strong></div>`;
 const priceText = (p) => (p.price ? `₦${p.price.toLocaleString("en-NG")}` : p.pricePlaceholder);
 
@@ -147,7 +147,7 @@ const home = `
  </div></div></section>
 
 <section class="section dark" id="featured-book"><div class="wrap book-grid">
- <div class="book-visual reveal"><img src="${book.image}" alt="Three copies of the Credit Risk 101 book by Williams Adeyemi, navy cover with large white title" width="600" height="900"></div>
+ <div class="book-visual reveal"><img src="${book.image}" alt="Four copies of the Credit Risk 101 book by Williams Adeyemi, green cover with large white and gold title" width="1000" height="1073"></div>
  <div class="book-info reveal"><span class="eyebrow">Featured book</span><h2>Credit Risk 101</h2>
   <p class="sub">${esc(book.subtitle)}</p><p class="by">By Williams Adeyemi</p>
   <p>${esc(book.short)}</p>
@@ -234,7 +234,7 @@ for (const p of products) {
     schema: [{ "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.short, brand: { "@type": "Brand", name: "LearnTern" }, ...(p.price ? { offers: { "@type": "Offer", priceCurrency: "NGN", price: p.price, availability: "https://schema.org/InStock", url: site.url + `/books/${p.slug}/` } } : {}) }],
     hero: pageHero(`<a href="/books/">Books &amp; Resources</a> / ${esc(p.name)}`, esc(p.name), esc(p.subtitle)),
     body: `<section class="section"><div class="wrap pd">
-    <div class="pd-cover">${p.image ? `<img src="${p.image}" alt="${esc(p.name)} book cover" style="border-radius:8px;box-shadow:0 30px 50px rgba(20,43,77,.3)" width="600" height="900">` : `<div class="cover" role="img" aria-label="${esc(p.name)} cover (placeholder design)"><small>${esc(p.cover.kicker)}</small><div><strong>${esc(p.cover.title)}</strong><i></i></div></div>`}</div>
+    <div class="pd-cover">${p.image ? `<img class="pd-img" src="${p.image}" alt="${esc(p.name)} book cover" width="1000" height="1073">` : `<div class="cover" role="img" aria-label="${esc(p.name)} cover (placeholder design)"><small>${esc(p.cover.kicker)}</small><div><strong>${esc(p.cover.title)}</strong><i></i></div></div>`}</div>
     <div><span class="eyebrow">${p.format}</span>${p.description.map((d) => `<p class="lead">${esc(d)}</p>`).join("")}
      <div class="buy-box"><div class="price-tag" style="font-size:1.6rem">${priceText(p)}</div>
       <form class="form" data-endpoint="/api/checkout" data-source="product-${p.slug}" novalidate><input type="hidden" name="product" value="${p.slug}"><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
