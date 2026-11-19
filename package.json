@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "build": "node build.mjs", "start": "node build.mjs && npx serve dist" },
-  "engines": { "node": ">=20" }
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "node build.mjs && npx serve dist"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.9.0"
+  }
 }
