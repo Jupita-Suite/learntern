@@ -1,11 +1,9 @@
-// Central site settings and placeholder values. Anything marked PLACEHOLDER needs configuring before launch.
+// Central site settings. Anything marked PLACEHOLDER still needs configuring before launch.
 export const site = {
   name: "LearnTern",
   tagline: "Practical Knowledge. Better Credit Decisions.",
-  url: process.env.SITE_URL || "https://learntern.com", // PLACEHOLDER: set SITE_URL in Vercel once the domain is connected
-  email: "hello@learntern.com", // PLACEHOLDER
-  trainingEmail: "training@learntern.com", // PLACEHOLDER
-  supportEmail: "support@learntern.com", // PLACEHOLDER
+  url: process.env.SITE_URL || "https://www.learntern.co", // overridden by SITE_URL in Vercel
+  email: "hello@learntern.co", // the only public contact address; contact + corporate-training forms are delivered here
   social: { linkedin: "#", x: "#", instagram: "#", youtube: "#" }, // PLACEHOLDER: add real profile URLs
   gaId: process.env.GA4_ID || "", // e.g. G-XXXXXXXXXX
   gtmId: process.env.GTM_ID || "", // e.g. GTM-XXXXXXX
@@ -37,8 +35,9 @@ export const products = [
     subtitle: "Technical questions, model answers, case studies and assessment exercises for credit analyst recruitment.",
     short: "A focused preparation pack to help you move beyond memorised definitions and perform confidently in technical interviews and assessments.",
     format: "Digital download (PDF + Excel)",
+    comingSoon: true, // page shows "Coming soon" and is hidden from the Books listing until launch
     price: null,
-    pricePlaceholder: "₦ — price to be confirmed",
+    pricePlaceholder: "Coming soon",
     image: null,
     cover: { title: "Interview Master Pack", kicker: "LearnTern" },
     includes: ["Technical interview questions", "Model answers", "Case study exercises", "Credit analyst assessment questions"],
@@ -49,6 +48,8 @@ export const products = [
       "Use it alongside Credit Risk 101 or on its own if you already know the fundamentals.",
     ],
   },
+  // Career Bundle hidden for now. Remove the comment markers to bring it back.
+  /*
   {
     slug: "credit-risk-career-bundle",
     name: "Credit Risk Career Bundle",
@@ -66,6 +67,7 @@ export const products = [
       "The Career Bundle combines learning and practice in one package so you can study the concepts, rehearse for interviews and work with real-style templates.",
     ],
   },
+  */
 ];
 
 export const courses = [

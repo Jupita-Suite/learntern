@@ -11,9 +11,9 @@ Static site (Node build) + Vercel serverless forms/checkout. Deploy: push to Git
 |---|---|
 | Domain + `SITE_URL` | Vercel env |
 | Product prices (NGN) | `data/site.mjs` (`price`). Credit Risk 101 is set to 12,500. Others still unpriced |
-| Paystack account approval + `PAYSTACK_SECRET_KEY`, webhook -> `https://<your-domain>/api/paystack-webhook` | Vercel env / Paystack dashboard (Settings > API Keys & Webhooks) |
+| Paystack account approval + `PAYSTACK_SECRET_KEY`, webhook -> `https://<your-domain>/api/paystack-webhook/` (trailing slash required: the site redirects without it and Paystack does not follow redirects) | Vercel env / Paystack dashboard (Settings > API Keys & Webhooks) |
 | `DOWNLOAD_SECRET`; `FILE_PATH_CREDIT_RISK_101` = pathname of the PDF in a **private Vercel Blob store connected to this project** (e.g. `Credit_Risk_101.pdf`). Do not paste signed/temporary blob URLs: they expire. `FILE_URL_<SLUG>` still works as a redirect fallback for long-lived URLs | Vercel env |
-| Email: `RESEND_API_KEY`, `EMAIL_FROM`, `OWNER_EMAIL`, `RESEND_AUDIENCE_ID`, `FREE_GUIDE_URL` | Vercel env |
+| Email: `RESEND_API_KEY`, `EMAIL_FROM`, `RESEND_AUDIENCE_ID`, `FREE_GUIDE_URL`. `OWNER_EMAIL` is optional: contact and corporate-training enquiries go to hello@learntern.co unless it is set. The hello@ mailbox must exist | Vercel env |
 | Real emails and social URLs | `data/site.mjs` |
 | GA4 `GA4_ID` / GTM `GTM_ID`; Search Console verification | Vercel env |
 | Author bio and credentials (verified only) | About page |

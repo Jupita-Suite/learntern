@@ -95,7 +95,7 @@ ${!site.gtmId && site.gaId ? `<script async src="https://www.googletagmanager.co
 <div class="social" aria-label="Social media">${[["linkedin", "in"], ["x", "X"], ["instagram", "ig"], ["youtube", "yt"]].map(([k, t]) => `<a href="${site.social[k]}" aria-label="LearnTern on ${k}" rel="noopener">${t}</a>`).join("")}</div></div>
 <div><h4>Platform</h4><ul><li><a href="/about/">About LearnTern</a></li><li><a href="/learn/">Learn</a></li><li><a href="/books/">Books &amp; Resources</a></li><li><a href="/interview-preparation/">Interview Preparation</a></li><li><a href="/courses/">Courses</a></li></ul></div>
 <div><h4>Business</h4><ul><li><a href="/corporate-training/">Corporate Training</a></li><li><a href="/contact/">Contact</a></li><li><a href="/account/">Customer Account</a></li></ul></div>
-<div><h4>Legal</h4><ul><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li><li><a href="/refund-policy/">Refund Policy</a></li></ul></div>
+${""/* Legal column hidden for now: <div><h4>Legal</h4><ul><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li><li><a href="/refund-policy/">Refund Policy</a></li></ul></div> */}
 </div><div class="foot-bottom"><span>© ${new Date().getFullYear()} LearnTern. All rights reserved.</span><span>Educational content only. Not financial, legal or regulatory advice.</span></div></div></footer>
 <script src="/js/main.js" defer></script></body></html>`;
 }
@@ -216,10 +216,18 @@ const productCard = (p) => `<div class="card reveal">${productMedia(p)}<div clas
 write("/books/", layout({
   path: "/books/", title: "Books & Resources", desc: "Credit risk books, interview preparation packs and practical templates from LearnTern.",
   hero: pageHero("Books &amp; Resources", "Books &amp; Resources", "Professional guides and practical toolkits to help you learn, practise and prepare."),
-  body: `<section class="section"><div class="wrap"><div class="grid g3">${products.map(productCard).join("")}</div>
-  <p class="fineprint" style="margin-top:28px">All prices are in Nigerian Naira (NGN). Payments are processed securely by Paystack.${products.some((p) => !p.price) ? " Pricing for remaining products will be announced soon." : ""}</p></div></section>`,
+  body: `<section class="section"><div class="wrap"><div class="grid g3">${products.filter((p) => !p.comingSoon).map(productCard).join("")}</div>
+  <p class="fineprint" style="margin-top:28px">All prices are in Nigerian Naira (NGN). Payments are processed securely by Paystack.</p></div></section>`,
 }));
 for (const p of products) {
+  if (p.comingSoon) {
+    write(`/books/${p.slug}/`, layout({
+      path: `/books/${p.slug}/`, title: p.name, desc: `${p.name} is coming soon from LearnTern.`, noindex: true,
+      hero: pageHero(`<a href="/books/">Books &amp; Resources</a> / ${esc(p.name)}`, esc(p.name), esc(p.subtitle)),
+      body: `<section class="section"><div class="wrap prose"><h2>Coming soon</h2><p>${esc(p.name)} is not available yet. We are putting the finishing touches on it.</p><p><a class="btn btn-navy" href="/books/credit-risk-101/">Explore Credit Risk 101</a> <a class="btn btn-outline" href="/contact/">Get in touch</a></p></div></section>`,
+    }));
+    continue;
+  }
   write(`/books/${p.slug}/`, layout({
     path: `/books/${p.slug}/`, title: p.name, desc: p.short, og: "product",
     schema: [{ "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.short, brand: { "@type": "Brand", name: "LearnTern" }, ...(p.price ? { offers: { "@type": "Offer", priceCurrency: "NGN", price: p.price, availability: "https://schema.org/InStock", url: site.url + `/books/${p.slug}/` } } : {}) }],
@@ -231,7 +239,7 @@ for (const p of products) {
       <form class="form" data-endpoint="/api/checkout" data-source="product-${p.slug}" novalidate><input type="hidden" name="product" value="${p.slug}"><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
        <div class="row2"><div class="field"><label for="n">Full name</label><input id="n" name="name" required autocomplete="name"></div><div class="field"><label for="e">Email for your download link</label><input id="e" name="email" type="email" required autocomplete="email"></div></div>
        <button class="btn btn-gold" type="submit">Buy Now</button><p class="form-msg" role="status" aria-live="polite"></p></form>
-      <p class="fineprint" style="margin-top:12px">${p.price ? "Secure payment in NGN via Paystack (card, bank transfer or USSD). After payment, a secure download link is sent to your email." : "Secure payment in NGN via Paystack once enabled. You receive an order confirmation and a secure download link by email."} See our <a href="/refund-policy/">refund policy</a>.</p>
+      <p class="fineprint" style="margin-top:12px">${p.price ? "Secure payment in NGN via Paystack (card, bank transfer or USSD). After payment, a secure download link is sent to your email." : "Secure payment in NGN via Paystack once enabled. You receive an order confirmation and a secure download link by email."}</p>
       ${p.price ? "" : `<div class="notice"><strong>Coming soon:</strong> this product is not yet available to purchase.</div>`}</div>
      <h2>What's included</h2><ul class="checklist">${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
      <h2>Who should buy it</h2><ul class="checklist">${p.audience.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
@@ -255,7 +263,7 @@ write("/interview-preparation/", layout({
    .map(([i, t, d]) => `<div class="card reveal">${icon(i)}<h3>${t}</h3><p>${d}</p></div>`).join("")}</div></div></section>
   <section class="section alt"><div class="wrap two-col"><div><span class="eyebrow">Free sample</span><h2>Try some technical questions</h2><p class="lead">A taste of the style of question and answer used in the preparation materials.</p></div>
   <div>${qa.map(([q, a]) => `<details class="qa"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</div></div></section>
-  <section class="section dark"><div class="wrap book-grid" style="grid-template-columns:1fr 1fr"><div><span class="eyebrow">Featured</span><h2>Credit Risk Interview Master Pack</h2><p class="lead">Technical questions, model answers, case study exercises and credit analyst assessment questions in one focused pack.</p><div class="price-row"><div class="price">${priceText(products[1])}</div><a class="btn btn-gold" href="/books/interview-master-pack/">Get the Master Pack</a></div></div>
+  <section class="section dark"><div class="wrap book-grid" style="grid-template-columns:1fr 1fr"><div><span class="eyebrow">Featured</span><h2>Credit Risk Interview Master Pack</h2><p class="lead">Technical questions, model answers, case study exercises and credit analyst assessment questions in one focused pack.</p><div class="price-row"><div class="price">Coming soon</div><a class="btn btn-gold" href="/books/interview-master-pack/">Learn more</a></div></div>
   <div><ul class="checklist" style="color:#e8eef7">${products[1].includes.map((i) => `<li>${i}</li>`).join("")}</ul></div></div></section>
   <section class="section"><div class="wrap"><div class="lead-box"><div><span class="eyebrow">Free guide</span><h2>25 credit risk interview questions</h2><p class="lead" style="color:#b9c6da">Get the free guide by email.</p></div>${leadForm("interview-free-guide")}</div></div></section>`,
 }));
@@ -278,10 +286,7 @@ write("/about/", layout({
   <p>LearnTern was created to make practical credit risk knowledge more accessible to aspiring and established professionals.</p>
   <p>We believe that good credit decisions require more than theoretical knowledge. They require the ability to understand borrowers, analyse financial information, identify risks, structure loans and monitor credit portfolios.</p>
   <p>Our goal is to bridge the gap between academic learning and the practical skills required in today's lending industry.</p></div>
-  <div class="grid g2">${[["Practical", "Real-world lending examples."], ["Credible", "Clear, careful explanations."], ["Career-focused", "Skills employers look for."], ["Market-aware", "Nigeria first, expanding internationally."]].map(([t, d]) => `<div class="card"><h3>${t}</h3><p>${d}</p></div>`).join("")}</div></div></section>
-  <section class="section alt"><div class="wrap"><div class="author"><div class="avatar" aria-hidden="true">WA</div><div class="prose"><span class="eyebrow">The author</span><h2>Williams Adeyemi</h2>
-  <p>Williams Adeyemi is the author of <em>Credit Risk 101</em> and a credit risk and financial services practitioner.</p>
-  <p><span class="pill-note">To complete</span> Add verified professional experience, credentials and photo here. Only confirmed details should be published.</p><a class="link-arrow" href="/books/credit-risk-101/">Read Credit Risk 101</a></div></div></div></section>`,
+  <div class="grid g2">${[["Practical", "Real-world lending examples."], ["Credible", "Clear, careful explanations."], ["Career-focused", "Skills employers look for."], ["Market-aware", "Nigeria first, expanding internationally."]].map(([t, d]) => `<div class="card"><h3>${t}</h3><p>${d}</p></div>`).join("")}</div></div></section>`,
 }));
 
 /* ---------- CORPORATE TRAINING ---------- */
@@ -301,7 +306,7 @@ write("/corporate-training/", layout({
 write("/contact/", layout({
   path: "/contact/", title: "Contact", desc: "Contact LearnTern for support, training and partnership enquiries.",
   hero: pageHero("Contact", "Get in touch", "Questions, partnerships, training or support. We read every message."),
-  body: `<section class="section"><div class="wrap two-col"><div><div class="stack">${[["General", site.email], ["Training enquiries", site.trainingEmail], ["Customer support", site.supportEmail]].map(([t, e]) => `<div class="row-card"><div><h3>${t}</h3><p>${e} <span class="pill-note">Placeholder</span></p></div></div>`).join("")}<div class="row-card"><div><h3>Partnership enquiries</h3><p>Select "Partnership" in the form.</p></div></div></div></div>
+  body: `<section class="section"><div class="wrap two-col"><div><div class="stack"><div class="row-card"><div><h3>Email us</h3><p><a href="mailto:${site.email}">${site.email}</a></p></div></div><div class="row-card"><div><h3>Partnership enquiries</h3><p>Select "Partnership" in the form.</p></div></div></div></div>
   <form class="form" data-endpoint="/api/contact" data-source="contact" novalidate><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
   <div class="row2"><div class="field"><label for="k1">Name</label><input id="k1" name="name" required></div><div class="field"><label for="k2">Email</label><input id="k2" type="email" name="email" required></div></div>
   <div class="field"><label for="k3">Topic</label><select id="k3" name="topic"><option>Customer support</option><option>Partnership</option><option>Training</option><option>General</option></select></div>
@@ -312,14 +317,14 @@ write("/contact/", layout({
 write("/account/", layout({
   path: "/account/", title: "Customer Account", desc: "Access your LearnTern purchases.",
   hero: pageHero("Account", "Customer account", "Access your purchases and downloads."),
-  body: `<section class="section"><div class="wrap prose"><h2>Accounts are coming soon</h2><p>Until customer accounts launch, your download link is sent to the email address used at checkout. If you cannot find it, <a href="/contact/">contact support</a> with your order email.</p><p class="fineprint"><span class="pill-note">Setup required</span> Full sign-in and order history need an authentication provider to be connected.</p></div></section>`,
+  body: `<section class="section"><div class="wrap prose"><h2>Accounts are coming soon</h2><p>Until customer accounts launch, your download link is sent to the email address used at checkout. If you cannot find it, <a href="/contact/">contact support</a> with your order email.</p></div></section>`,
 }));
 
-/* ---------- LEGAL (drafts; need legal review) ---------- */
-const legal = (path, title, paras) => write(path, layout({ path, title, desc: `${title} for LearnTern.`, hero: pageHero(title, title, ""), body: `<section class="section"><div class="wrap prose"><p><span class="pill-note">Draft: requires legal review before launch</span></p>${paras.map(([h, p]) => `<h2>${h}</h2><p>${p}</p>`).join("")}<p class="fineprint">Last updated ${fmtDate("2026-11-16")}.</p></div></section>` }));
-legal("/privacy-policy/", "Privacy Policy", [["What we collect", "Details you provide through forms (name, email, enquiry content) and standard analytics data if analytics is enabled."], ["How we use it", "To deliver purchases and free resources, respond to enquiries, send updates you request and improve the site. You can unsubscribe at any time."], ["Your rights", "You may request access, correction or deletion of your personal data. Contact us using the details on the Contact page. This policy should be aligned with the Nigeria Data Protection Act and, when expanding, UK/EU GDPR."]]);
-legal("/terms/", "Terms and Conditions", [["Use of the site", "Content is provided for general education and is not financial, legal or regulatory advice."], ["Digital products", "Purchases are licensed for personal use. Redistribution, resale or sharing of download links is not permitted."], ["Liability", "To be completed with legal advice."]]);
-legal("/refund-policy/", "Refund Policy", [["Digital downloads", "Because digital products are delivered immediately, refund terms must be defined here. Suggested starting point: refunds considered for faulty or undeliverable files, requested within a stated number of days."], ["How to request", `Email ${site.supportEmail} with your order details.`]]);
+/* ---------- LEGAL (hidden for now: Privacy Policy, Terms, Refund Policy. Remove the "// " prefixes to restore) ---------- */
+// const legal = (path, title, paras) => write(path, layout({ path, title, desc: `${title} for LearnTern.`, hero: pageHero(title, title, ""), body: `<section class="section"><div class="wrap prose"><p><span class="pill-note">Draft: requires legal review before launch</span></p>${paras.map(([h, p]) => `<h2>${h}</h2><p>${p}</p>`).join("")}<p class="fineprint">Last updated ${fmtDate("2026-11-16")}.</p></div></section>` }));
+// legal("/privacy-policy/", "Privacy Policy", [["What we collect", "Details you provide through forms (name, email, enquiry content) and standard analytics data if analytics is enabled."], ["How we use it", "To deliver purchases and free resources, respond to enquiries, send updates you request and improve the site. You can unsubscribe at any time."], ["Your rights", "You may request access, correction or deletion of your personal data. Contact us using the details on the Contact page. This policy should be aligned with the Nigeria Data Protection Act and, when expanding, UK/EU GDPR."]]);
+// legal("/terms/", "Terms and Conditions", [["Use of the site", "Content is provided for general education and is not financial, legal or regulatory advice."], ["Digital products", "Purchases are licensed for personal use. Redistribution, resale or sharing of download links is not permitted."], ["Liability", "To be completed with legal advice."]]);
+// legal("/refund-policy/", "Refund Policy", [["Digital downloads", "Because digital products are delivered immediately, refund terms must be defined here. Suggested starting point: refunds considered for faulty or undeliverable files, requested within a stated number of days."], ["How to request", `Email ${site.supportEmail} with your order details.`]]);
 
 /* ---------- 404 + favicon + SEO files ---------- */
 writeFileSync(join(OUT, "404.html"), layout({ path: "/404", title: "Page not found", desc: "Page not found.", noindex: true, hero: pageHero("404", "Page not found", "The page you're looking for doesn't exist or has moved."), body: `<section class="section"><div class="wrap"><a class="btn btn-navy" href="/">Back to homepage</a> <a class="btn btn-outline" href="/learn/">Browse articles</a></div></section>` }));
