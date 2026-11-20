@@ -1,0 +1,128 @@
+// Blog: news and trends in credit risk, digital banking and fintech (Nigeria, Africa, global).
+// To publish: add an object to the TOP of `posts` and rebuild.
+//   region: "Nigeria" | "Africa" | "Global"   (drives the filter buttons)
+//   category: short topic label, e.g. "Regulation", "Credit Risk", "Digital Banking", "Fintech", "Markets"
+//   body blocks: { h } subheading, { p } paragraph, { ul: [...] } list, { note } small italic note
+//   sources: every factual claim should trace to one of these links
+export const regions = ["Nigeria", "Africa", "Global"];
+export const byline = "LearnTern Editorial";
+
+export const posts = [
+  {
+    slug: "nigeria-digital-lending-rules-back-in-force",
+    title: "Nigeria's digital lending rules are back in force: what lenders and borrowers should check",
+    category: "Regulation",
+    region: "Nigeria",
+    date: "2026-11-20",
+    readTime: 5,
+    excerpt: "After a court dismissed the challenge to the FCCPC's digital lending regulations in July, the rules are enforceable again. Here is what changed, what is still unclear, and what to check before you lend or borrow.",
+    body: [
+      { p: "Nigeria's rules for loan apps and other digital lenders have had a stop-start year. The Digital, Electronic, Online or Non-Traditional Consumer Lending Regulations, 2025 (the DEON Regulations) were put on hold in April and restored in July. For anyone who lends, borrows from, or analyses digital lenders, the sequence matters." },
+      { h: "What happened" },
+      { ul: [
+        "15 April 2026: an interim order from the Federal High Court in Lagos restrained the implementation and enforcement of the regulations, in a suit brought by the Wireless Application Service Providers Association of Nigeria (WASPAN).",
+        "Late June 2026: the Federal Competition and Consumer Protection Commission (FCCPC) rejected a media report that it had approved 48 more loan apps. It said it had granted no new approvals while bound by the court order, and told the public to rely on its official channels for updates.",
+        "20 July 2026: Justice A. Alagoa dismissed the WASPAN suit in its entirety, held that the regulations were validly issued under the FCCPC's powers, and discharged the interim order.",
+        "The FCCPC then said the regulations were \"once again fully operational and enforceable\", and that updated compliance guidelines for digital lenders would follow.",
+      ] },
+      { h: "What the FCCPC says it will oversee" },
+      { p: "According to TechAfrica News, resumed oversight covers four areas: the registration of loan apps, the disclosure of interest rates, compliance with data privacy requirements, and debt recovery practices. The report did not list specific lender obligations or penalties, so lenders should read the regulations and the FCCPC's guidelines directly rather than rely on summaries, including this one." },
+      { h: "What lenders should do now" },
+      { note: "This section is LearnTern's view, not a regulatory requirement." },
+      { ul: [
+        "Confirm your registration status through the FCCPC's official channels and keep the evidence on file.",
+        "Review how you present pricing. The total cost of a loan should be clear to the borrower before they accept.",
+        "Audit data collection and consent practices against data privacy requirements.",
+        "Review collections scripts, agent conduct and third-party recovery partners. Recovery practice is one of the named focus areas.",
+      ] },
+      { p: "These are conduct and compliance risks, but they behave like credit risks. A regulatory action can interrupt disbursements, raise funding costs and damage a lender's standing with the institutions that finance it. Credit analysts assessing a fintech lender, for example when considering a funding line, should treat regulatory standing as part of due diligence alongside portfolio quality." },
+      { h: "What borrowers should do" },
+      { ul: [
+        "Check that a lender is registered using the FCCPC's official channels, not a list shared on social media or in a news story. The FCCPC itself warned in June that a report about new approvals was false.",
+        "Ask for the full cost of the loan, including fees and the repayment schedule, before you accept.",
+        "Be careful about the permissions you give an app, and keep a copy of your loan agreement.",
+      ] },
+      { h: "What is still unclear" },
+      { p: "The reports we reviewed do not describe penalties, and updated compliance guidelines were described as forthcoming as of 22 July. Check the FCCPC's official channels for the latest position. This article reflects reporting available at the time of writing and is not legal advice." },
+    ],
+    sources: [
+      { title: "TechAfrica News: Nigeria strengthens consumer protection as FCCPC resumes digital lending enforcement (22 July 2026)", url: "https://techafricanews.com/2026/07/22/nigeria-strengthens-consumer-protection-as-fccpc-resumes-digital-lending-enforcement/" },
+      { title: "Legit.ng: FCCPC denies approving 48 new loan apps, says no fresh digital lenders were licensed (29 June 2026)", url: "https://www.legit.ng/business-economy/industry/1716699-fccpc-denies-approving-48-loan-apps-fresh-digital-lenders-licensed/" },
+    ],
+  },
+  {
+    slug: "nigerian-banks-recapitalised-who-gets-the-credit",
+    title: "Nigerian banks are recapitalised. The harder question is who gets the credit",
+    category: "Credit Risk",
+    region: "Nigeria",
+    date: "2026-11-20",
+    readTime: 6,
+    excerpt: "Banks have raised ₦4.65 trillion in fresh equity. A new commentary asks whether that strength will reach the businesses that need loans. We unpack the numbers and what they mean for credit risk.",
+    body: [
+      { p: "Nigeria's bank recapitalisation was one of the biggest changes to the sector in years. According to a commentary published by Nigeria Communications Week on 25 October 2026, the exercise brought in ₦4.65 trillion of new equity, and 33 of 37 banks had met the updated capital requirements by the end of March 2026. The commentary's real question is what comes next: will stronger banks lend more to the businesses that need credit?" },
+      { note: "The figures below come from that opinion piece, which cites the IMF, the CBN and the Development Bank of Nigeria. We have not checked each number against the original data, and the conclusions about policy are the author's." },
+      { h: "What the numbers say" },
+      { ul: [
+        "Private-sector credit was about ₦83.43 trillion in July 2026, up slightly from ₦83.26 trillion in June, while net credit to government fell from about ₦40.03 trillion to ₦33.92 trillion (CBN data, as cited).",
+        "Credit to small-scale enterprises was ₦177.44 billion in 2025, about 0.38% of ₦47.10 trillion in private-sector credit (a Development Bank of Nigeria research note, as cited).",
+        "The IMF's third-quarter 2025 figures, as cited, put the capital adequacy ratio at 11.7% and non-performing loans at 8%, above the prudential ceiling. These are 2025 positions, not today's.",
+        "The author says government securities made up 22% of banks' total assets but does not give a source or date for that figure.",
+      ] },
+      { h: "Why this matters for credit risk" },
+      { note: "This section is LearnTern's analysis." },
+      { p: "Capital is a buffer, not a verdict on loan quality. A well-capitalised bank can still carry a weak loan book, which is why capital adequacy and the non-performing loan ratio should be read together. Newly raised equity gives banks room to absorb losses; it does not by itself make the loans safer." },
+      { p: "It also shows why lending decisions matter. Holding government securities carries little credit risk but does little to finance businesses. Lending to small enterprises carries real default risk, and managing it depends on the skills credit teams build: cash flow analysis, bank statement analysis, sensible structuring and close monitoring after disbursement." },
+      { h: "The author's argument" },
+      { p: "The commentary argues that recapitalisation was necessary but should not be the final measure of reform. It proposes three tests: whether banks are resilient, whether credit reaches viable firms, and whether it supports productive investment and jobs. It also calls for the CBN to require consistent reporting of small-enterprise lending and securities holdings." },
+      { p: "Lenders often reply that small-business lending carries higher default risk and that many borrowers lack formal records, which makes underwriting harder. Both views can be true: better data and better underwriting are what narrow the gap." },
+      { h: "What to watch next" },
+      { ul: [
+        "Whether private-sector credit keeps growing while net credit to government keeps falling.",
+        "Updated non-performing loan and capital adequacy figures, since the IMF numbers cited date from 2025.",
+        "Whether the CBN publishes regular small-enterprise lending data.",
+      ] },
+    ],
+    sources: [
+      { title: "Nigeria Communications Week: Nigeria's recapitalised banks and the missing link between profit and prosperity (25 October 2026, opinion)", url: "https://www.nigeriacommunicationsweek.com.ng/2026/10/25/nigerias-recapitalised-banks-and-missing-link-between-profit-and-prosperity" },
+    ],
+  },
+  {
+    slug: "imf-october-2026-stability-report-credit-risk-takeaways",
+    title: "The IMF's October 2026 stability report: what credit professionals should take from it",
+    category: "Markets",
+    region: "Global",
+    date: "2026-11-20",
+    readTime: 5,
+    excerpt: "The IMF says markets have been resilient but risks remain elevated, pointing to AI-related corrections, sovereign bond yield shocks and cyber threats. Here is what credit teams can take from it.",
+    body: [
+      { p: "The IMF's Global Financial Stability Report for October 2026 carries a message credit professionals will recognise: conditions look fine, but the buffers are thinner than they appear. The overview says markets have stayed resilient, supported by solid growth and strong corporate earnings, while financial stability risks remain elevated." },
+      { h: "Three triggers the IMF highlights" },
+      { ul: [
+        "AI-related corrections in markets.",
+        "A sharp rise in sovereign bond yields, which the report says could come from resurgent inflation or fiscal concerns.",
+        "Cyber threats.",
+      ] },
+      { h: "Where credit risk shows up" },
+      { ul: [
+        "Banks: the global banking system is described as broadly resilient, but \"pockets of weaker banks persist\".",
+        "Nonbanks: liquidity mismatches among insurers and pension funds have increased.",
+        "Private credit: \"rising leverage and contingent liquidity risks in private credit could amplify stress\", according to the overview.",
+        "Hedge funds: they hold about $13 trillion in assets, more than three times their 2013 level. The report says leverage and crowded positions can trigger synchronised deleveraging in stress.",
+        "Frontier economies: they have increasingly relied on less transparent forms of financing, and some emerging markets have seen policy buffers erode.",
+      ] },
+      { p: "The overview we reviewed does not mention Africa or name specific countries, so it is not a verdict on any African market. The detailed chapters and data files may contain country-level analysis and are worth reading before drawing local conclusions." },
+      { h: "What this means for lenders in Nigeria and Africa" },
+      { note: "This section is LearnTern's analysis, not a finding of the IMF." },
+      { p: "Global shocks reach local lenders through a few familiar channels: funding costs, exchange rates and sovereign yields. Sovereign yields matter in particular because they influence the benchmark rates lenders price against and the value of government securities that banks hold." },
+      { ul: [
+        "Stress-test funding costs and repayment capacity, not just current portfolio quality.",
+        "Look through to who finances your counterparties. Exposure to nonbank financiers with liquidity mismatches is a risk even when your own borrower looks sound.",
+        "Treat opaque financing structures as a warning sign and ask for the detail.",
+        "Include cyber resilience in lender and counterparty due diligence.",
+      ] },
+    ],
+    sources: [
+      { title: "IMF: Global Financial Stability Report, October 2026 (Resilience, Risk, and Transformation)", url: "https://www.imf.org/en/publications/gfsr/issues/2026/10/13/global-financial-stability-report-october-2026" },
+    ],
+  },
+];

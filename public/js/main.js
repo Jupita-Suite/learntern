@@ -12,6 +12,7 @@
 
   // Forms -> /api/*
   var T0=Date.now();
+  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[data-ad]');if(a&&window.dataLayer)window.dataLayer.push({event:'ad_click',ad_id:a.getAttribute('data-ad')})});
   document.querySelectorAll('form[data-endpoint]').forEach(function(f){
     f.addEventListener('submit',function(ev){
       ev.preventDefault();
