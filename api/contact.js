@@ -1,11 +1,11 @@
-import { json, validEmail, clean, sendEmail, esc } from './_lib.js';
+import { json, validEmail, clean, sendEmail, esc, looksAutomated } from './_lib.js';
 import { site } from '../data/site.mjs';
 // Contact + corporate-training enquiries. Delivered to OWNER_EMAIL if set, otherwise hello@learntern.co (site.email).
 // Needs: RESEND_API_KEY, EMAIL_FROM.
 export default async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
   const b = req.body || {};
-  if (b.hp_extra) return json(res, 200, { message: 'Thank you.' });
+  if (looksAutomated(b)) return json(res, 200, { message: 'Thank you.' });
   const name = clean(b.name, 120), email = clean(b.email, 254), message = clean(b.message, 4000);
   if (!name || !validEmail(email) || !message) return json(res, 400, { error: 'Please complete your name, a valid email and your message.' });
   const to = process.env.OWNER_EMAIL || site.email;

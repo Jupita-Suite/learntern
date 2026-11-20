@@ -109,7 +109,6 @@ const write = (path, html) => {
 };
 
 const leadForm = (src, label = "Get the Free Guide") => `<form class="form" data-endpoint="/api/subscribe" data-source="${src}" novalidate>
-  <input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
   <input type="hidden" name="intent" value="free-guide">
   <div class="field"><label for="fn-${src}">First name</label><input id="fn-${src}" name="firstName" required autocomplete="given-name"></div>
   <div class="field"><label for="em-${src}">Email address</label><input id="em-${src}" name="email" type="email" required autocomplete="email"></div>
@@ -179,7 +178,7 @@ const home = `
 
 <section class="section"><div class="wrap news">
  <div><span class="eyebrow">Newsletter</span><h2>Stay Ahead in Credit Risk</h2><p class="lead">Receive practical credit risk lessons, interview tips, career opportunities and new learning resources.</p></div>
- <form class="form" data-endpoint="/api/subscribe" data-source="home-newsletter" novalidate><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
+ <form class="form" data-endpoint="/api/subscribe" data-source="home-newsletter" novalidate>
   <div class="inline"><div class="field" style="flex:1"><label for="nl-email" class="sr" style="position:absolute;left:-999px">Email address</label><input id="nl-email" name="email" type="email" placeholder="Your email address" required autocomplete="email" aria-label="Email address"></div><button class="btn btn-navy" type="submit">Subscribe</button></div>
   <p class="form-msg" role="status" aria-live="polite"></p></form></div></section>`;
 write("/", layout({ path: "/", title: "LearnTern | Practical Credit Risk Education", desc: "Practical credit risk education for the next generation of credit professionals. Guides, interview preparation and learning resources focused on the Nigerian lending market.", body: home, schema: [{ "@context": "https://schema.org", "@type": "WebSite", name: "LearnTern", url: site.url }] }));
@@ -237,7 +236,7 @@ for (const p of products) {
     <div class="pd-cover">${p.image ? `<img class="pd-img" src="${p.image}" alt="${esc(p.name)} book cover" width="1000" height="1073">` : `<div class="cover" role="img" aria-label="${esc(p.name)} cover (placeholder design)"><small>${esc(p.cover.kicker)}</small><div><strong>${esc(p.cover.title)}</strong><i></i></div></div>`}</div>
     <div><span class="eyebrow">${p.format}</span>${p.description.map((d) => `<p class="lead">${esc(d)}</p>`).join("")}
      <div class="buy-box"><div class="price-tag" style="font-size:1.6rem">${priceText(p)}</div>
-      <form class="form" data-endpoint="/api/checkout" data-source="product-${p.slug}" novalidate><input type="hidden" name="product" value="${p.slug}"><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <form class="form" data-endpoint="/api/checkout" data-source="product-${p.slug}" novalidate><input type="hidden" name="product" value="${p.slug}">
        <div class="row2"><div class="field"><label for="n">Full name</label><input id="n" name="name" required autocomplete="name"></div><div class="field"><label for="e">Email for your download link</label><input id="e" name="email" type="email" required autocomplete="email"></div></div>
        <button class="btn btn-gold" type="submit">Buy Now</button><p class="form-msg" role="status" aria-live="polite"></p></form>
       <p class="fineprint" style="margin-top:12px">${p.price ? "Secure payment in NGN via Paystack (card, bank transfer or USSD). After payment, a secure download link is sent to your email." : "Secure payment in NGN via Paystack once enabled. You receive an order confirmation and a secure download link by email."} See our <a href="/refund-policy/">refund policy</a>.</p>
@@ -274,7 +273,7 @@ write("/courses/", layout({
   hero: pageHero("Courses", "Structured Credit Risk Courses", "A catalogue of practical courses is being developed. Join the list to hear first."),
   body: `<section class="section"><div class="wrap"><div class="grid g3">${courses.map((c) => `<div class="card reveal"><span class="status">${c.status}</span><h3>${c.title}</h3><p>${c.desc}</p><span class="fineprint">Enrolment not yet open</span></div>`).join("")}</div>
   <div class="lead-box" style="margin-top:56px"><div><h2>Be first to know</h2><p class="lead" style="color:#b9c6da">Course details, launch dates and pricing will be shared by email.</p></div>
-  <form class="form" data-endpoint="/api/subscribe" data-source="courses-waitlist" novalidate><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true"><input type="hidden" name="intent" value="course-waitlist"><div class="field"><label for="cw">Email address</label><input id="cw" name="email" type="email" required></div><button class="btn btn-gold" type="submit">Join the waitlist</button><p class="form-msg" role="status" aria-live="polite"></p></form></div>
+  <form class="form" data-endpoint="/api/subscribe" data-source="courses-waitlist" novalidate><input type="hidden" name="intent" value="course-waitlist"><div class="field"><label for="cw">Email address</label><input id="cw" name="email" type="email" required></div><button class="btn btn-gold" type="submit">Join the waitlist</button><p class="form-msg" role="status" aria-live="polite"></p></form></div>
   <p class="fineprint" style="margin-top:20px">Course pages are structured so a learning management system (LMS) can be connected later.</p></div></section>`,
 }));
 
@@ -296,7 +295,7 @@ write("/corporate-training/", layout({
   body: `<section class="section"><div class="wrap"><div class="sec-head"><span class="eyebrow">Who we train</span><h2>Built for lending institutions</h2><p class="lead">Commercial banks · Microfinance banks · Fintech lenders · Lending companies · Credit teams · Financial institutions</p></div>
   <div class="grid g4">${["Credit risk fundamentals", "Loan underwriting", "SME credit assessment", "Credit portfolio monitoring", "Credit analysis", "Collections and recovery", "Credit risk reporting"].map((s, i) => `<div class="card num reveal" data-n="0${i + 1}"><h3>${s}</h3></div>`).join("")}</div></div></section>
   <section class="section alt"><div class="wrap two-col"><div><span class="eyebrow">Enquiry</span><h2>Tell us about your team</h2><p class="lead">Share your goals and team size and we will respond with a proposed approach.</p></div>
-  <form class="form" data-endpoint="/api/contact" data-source="corporate-training" novalidate><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true"><input type="hidden" name="topic" value="Corporate training">
+  <form class="form" data-endpoint="/api/contact" data-source="corporate-training" novalidate><input type="hidden" name="topic" value="Corporate training">
   <div class="row2"><div class="field"><label for="c1">Your name</label><input id="c1" name="name" required></div><div class="field"><label for="c2">Work email</label><input id="c2" type="email" name="email" required></div></div>
   <div class="row2"><div class="field"><label for="c3">Organisation</label><input id="c3" name="organisation" required></div><div class="field"><label for="c4">Team size</label><select id="c4" name="teamSize"><option>1–10</option><option>11–50</option><option>51–200</option><option>200+</option></select></div></div>
   <div class="field"><label for="c5">Training needs</label><textarea id="c5" name="message" required></textarea></div><button class="btn btn-navy" type="submit">Send enquiry</button><p class="form-msg" role="status" aria-live="polite"></p></form></div></section>`,
@@ -307,7 +306,7 @@ write("/contact/", layout({
   path: "/contact/", title: "Contact", desc: "Contact LearnTern for support, training and partnership enquiries.",
   hero: pageHero("Contact", "Get in touch", "Questions, partnerships, training or support. We read every message."),
   body: `<section class="section"><div class="wrap two-col"><div><div class="stack"><div class="row-card"><div><h3>Email us</h3><p><a href="mailto:${site.email}">${site.email}</a></p></div></div><div class="row-card"><div><h3>Partnership enquiries</h3><p>Select "Partnership" in the form.</p></div></div></div></div>
-  <form class="form" data-endpoint="/api/contact" data-source="contact" novalidate><input class="hp" type="text" name="hp_extra" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <form class="form" data-endpoint="/api/contact" data-source="contact" novalidate>
   <div class="row2"><div class="field"><label for="k1">Name</label><input id="k1" name="name" required></div><div class="field"><label for="k2">Email</label><input id="k2" type="email" name="email" required></div></div>
   <div class="field"><label for="k3">Topic</label><select id="k3" name="topic"><option>Customer support</option><option>Partnership</option><option>Training</option><option>General</option></select></div>
   <div class="field"><label for="k4">Message</label><textarea id="k4" name="message" required></textarea></div><button class="btn btn-navy" type="submit">Send message</button><p class="form-msg" role="status" aria-live="polite"></p></form></div></section>`,

@@ -5,7 +5,6 @@ import { products } from '../data/site.mjs';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
   const b = req.body || {};
-  if (b.hp_extra) return json(res, 400, { error: 'Could not submit. Please reload the page and try again.' });
   const p = products.find((x) => x.slug === b.product);
   const email = clean(b.email, 254);
   if (!p) return json(res, 400, { error: 'Unknown product.' });

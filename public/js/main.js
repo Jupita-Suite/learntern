@@ -11,12 +11,14 @@
   } else els.forEach(function(el){el.classList.add('in')});
 
   // Forms -> /api/*
+  var T0=Date.now();
   document.querySelectorAll('form[data-endpoint]').forEach(function(f){
     f.addEventListener('submit',function(ev){
       ev.preventDefault();
       var msg=f.querySelector('.form-msg'),b=f.querySelector('button[type=submit]');
       var data=Object.fromEntries(new FormData(f).entries());
       data.source=f.getAttribute('data-source')||location.pathname;
+      data._e=Date.now()-T0; // ms since page load: plain scripted POSTs do not send this
       msg.className='form-msg';msg.textContent='';
       b.disabled=true;var old=b.textContent;b.textContent='Sending…';
       fetch(f.getAttribute('data-endpoint'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
