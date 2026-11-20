@@ -6,6 +6,13 @@ Static site (Node build) + Vercel serverless forms/checkout. Deploy: push to Git
 - `data/articles.mjs` – articles. `data/site.mjs` – prices, emails, social links, products, courses.
 - `node build.mjs` then open `dist/`.
 
+## Blog and ads
+- **Publish a post:** add an object to the top of `posts` in `data/blog.mjs` (title, category, region, date, excerpt, body, sources), then merge. Posts appear at `/blog/`, in the sitemap and in `/blog/rss.xml`. Every factual claim should link to a source.
+- **Ads:** `data/ads.mjs`. Add the banner to `public/assets/ads/`, add an entry (placements, start/end dates), merge. Ads are always labelled "Sponsored". Slots: `blog-top`, `article-inline`; the end of each post shows a house "Advertise with us" box unless AdSense is on.
+- **Google AdSense (optional):** set `ADSENSE_CLIENT` and `ADSENSE_SLOT` in Vercel. Needs an approved AdSense account, a privacy policy page and cookie/consent handling first.
+- **Ad clicks:** pushed to `dataLayer` as `ad_click` (with `ad_id`) when GTM is configured.
+- **Advertiser enquiries:** the form at `/advertise/` goes to hello@learntern.co via `/api/contact`.
+
 ## Must be configured before launch
 | Item | Where |
 |---|---|

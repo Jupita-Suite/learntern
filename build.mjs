@@ -4,6 +4,8 @@ import { dirname, join } from "node:path";
 import { site, products, courses } from "./data/site.mjs";
 import { articles, categories } from "./data/articles.mjs";
 import { refundPolicy, refundUpdated } from "./data/refund-policy.mjs";
+import { posts, regions, byline } from "./data/blog.mjs";
+import { ads, adsense } from "./data/ads.mjs";
 
 const OUT = "dist";
 rmSync(OUT, { recursive: true, force: true });
@@ -62,9 +64,9 @@ const productMedia = (p, mini = false) =>
 const priceText = (p) => (p.price ? `₦${p.price.toLocaleString("en-NG")}` : p.pricePlaceholder);
 
 /* ---------- layout ---------- */
-const navItems = [["Home", "/"], ["Learn", "/learn/"], ["Books & Resources", "/books/"], ["Interview Preparation", "/interview-preparation/"], ["Courses", "/courses/"], ["About", "/about/"]];
+const navItems = [["Home", "/"], ["Learn", "/learn/"], ["Blog", "/blog/"], ["Books & Resources", "/books/"], ["Interview Preparation", "/interview-preparation/"], ["Courses", "/courses/"], ["About", "/about/"]];
 
-function layout({ path, title, desc, body, og = "website", schema = [], hero = "", noindex = false }) {
+function layout({ path, title, desc, body, og = "website", schema = [], hero = "", noindex = false, head = "" }) {
   const full = title.includes("LearnTern") ? title : `${title} | LearnTern`;
   const canonical = site.url + path;
   if (!noindex) urls.push(path);
@@ -83,7 +85,7 @@ function layout({ path, title, desc, body, og = "website", schema = [], hero = "
 ${ld.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join("\n")}
 ${site.gtmId ? `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${site.gtmId}');</script>` : ""}
 ${!site.gtmId && site.gaId ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${site.gaId}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${site.gaId}');</script>` : ""}
-</head><body>
+${head}</head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap"><div class="nav">${logo}
 <nav aria-label="Main"><ul class="nav-links">${navItems.map(([l, h]) => `<li><a href="${h}"${cur(h)}>${l}</a></li>`).join("")}</ul></nav>
@@ -94,8 +96,8 @@ ${!site.gtmId && site.gaId ? `<script async src="https://www.googletagmanager.co
 <footer class="footer"><div class="wrap"><div class="foot-grid">
 <div>${logo}<p style="margin-top:16px;max-width:34ch">${site.tagline}<br>Practical credit risk education for the next generation of credit professionals.</p>
 <div class="social" aria-label="Social media">${[["linkedin", "in"], ["x", "X"], ["instagram", "ig"], ["youtube", "yt"]].map(([k, t]) => `<a href="${site.social[k]}" aria-label="LearnTern on ${k}" rel="noopener">${t}</a>`).join("")}</div></div>
-<div><h4>Platform</h4><ul><li><a href="/about/">About LearnTern</a></li><li><a href="/learn/">Learn</a></li><li><a href="/books/">Books &amp; Resources</a></li><li><a href="/interview-preparation/">Interview Preparation</a></li><li><a href="/courses/">Courses</a></li></ul></div>
-<div><h4>Business</h4><ul><li><a href="/corporate-training/">Corporate Training</a></li><li><a href="/contact/">Contact</a></li><li><a href="/account/">Customer Account</a></li></ul></div>
+<div><h4>Platform</h4><ul><li><a href="/about/">About LearnTern</a></li><li><a href="/learn/">Learn</a></li><li><a href="/blog/">Blog</a></li><li><a href="/books/">Books &amp; Resources</a></li><li><a href="/interview-preparation/">Interview Preparation</a></li><li><a href="/courses/">Courses</a></li></ul></div>
+<div><h4>Business</h4><ul><li><a href="/corporate-training/">Corporate Training</a></li><li><a href="/advertise/">Advertise with us</a></li><li><a href="/contact/">Contact</a></li><li><a href="/account/">Customer Account</a></li></ul></div>
 <div><h4>Legal</h4><ul><li><a href="/refund-policy/">Refund Policy</a></li>${""/* Privacy Policy and Terms hidden for now: <li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li> */}</ul></div>
 </div><div class="foot-bottom"><span>© ${new Date().getFullYear()} LearnTern. All rights reserved.</span><span>Educational content only. Not financial, legal or regulatory advice.</span></div></div></footer>
 <script src="/js/main.js" defer></script></body></html>`;
@@ -332,6 +334,71 @@ write("/refund-policy/", layout({
 // const legal = (path, title, paras) => write(path, layout({ path, title, desc: `${title} for LearnTern.`, hero: pageHero(title, title, ""), body: `<section class="section"><div class="wrap prose"><p><span class="pill-note">Draft: requires legal review before launch</span></p>${paras.map(([h, p]) => `<h2>${h}</h2><p>${p}</p>`).join("")}<p class="fineprint">Last updated ${fmtDate("2026-11-16")}.</p></div></section>` }));
 // legal("/privacy-policy/", "Privacy Policy", [["What we collect", "Details you provide through forms (name, email, enquiry content) and standard analytics data if analytics is enabled."], ["How we use it", "To deliver purchases and free resources, respond to enquiries, send updates you request and improve the site. You can unsubscribe at any time."], ["Your rights", "You may request access, correction or deletion of your personal data. Contact us using the details on the Contact page. This policy should be aligned with the Nigeria Data Protection Act and, when expanding, UK/EU GDPR."]]);
 // legal("/terms/", "Terms and Conditions", [["Use of the site", "Content is provided for general education and is not financial, legal or regulatory advice."], ["Digital products", "Purchases are licensed for personal use. Redistribution, resale or sharing of download links is not permitted."], ["Liability", "To be completed with legal advice."]]);
+
+/* ---------- ADS ---------- */
+const today0 = new Date().toISOString().slice(0, 10);
+const adFor = (slot) => ads.find((a) => a.placements.includes(slot) && a.start <= today0 && (!a.end || today0 <= a.end));
+const adNote = `<p class="ad-note">Advertiser content. LearnTern does not provide, arrange or endorse loans or other products shown here. Check that any lender is registered before you borrow. <a href="/advertise/">Advertise with us</a></p>`;
+function adSlot(slot) {
+  const a = adFor(slot);
+  if (a) return `<aside class="ad" aria-label="Sponsored advertisement"><span class="ad-label">Sponsored</span><a class="ad-img" href="${esc(a.href)}" target="_blank" rel="sponsored noopener noreferrer" data-ad="${esc(a.id)}"><img src="${esc(a.image)}" alt="${esc(a.alt)}" width="${a.width}" height="${a.height}" loading="lazy"></a>${adNote}</aside>`;
+  if (slot === "article-end" && adsense.client && adsense.slot)
+    return `<aside class="ad" aria-label="Advertisement"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(adsense.client)}" data-ad-slot="${esc(adsense.slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>`;
+  if (slot === "article-end")
+    return `<aside class="ad ad-house" aria-label="Advertise with LearnTern"><span class="ad-label">Advertise</span><h3>Reach credit, risk and banking professionals</h3><p>Put your brand in front of LearnTern readers.</p><a class="btn btn-navy btn-sm" href="/advertise/">Advertise with LearnTern</a></aside>`;
+  return "";
+}
+const adsenseHead = adsense.client ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${esc(adsense.client)}" crossorigin="anonymous"></script>` : "";
+
+/* ---------- BLOG ---------- */
+const sortedPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date));
+const blogCard = (a) => `<article class="card" data-title="${esc(a.title)}" data-excerpt="${esc(a.excerpt)}" data-cat="${esc(a.region)}">
+  ${thumb(a)}<div class="meta"><span>${esc(a.region)} · ${esc(a.category)}</span><span>${fmtDate(a.date)}</span></div>
+  <h3><a class="card-link" href="/blog/${a.slug}/">${esc(a.title)}</a></h3><p>${esc(a.excerpt)}</p><span class="link-arrow">Read Post</span></article>`;
+write("/blog/", layout({
+  path: "/blog/", title: "Blog: Credit Risk, Digital Banking and Fintech News", desc: "News, trends and analysis on credit risk, digital banking and fintech in Nigeria, Africa and around the world.",
+  head: adsenseHead,
+  hero: pageHero("Blog", "Credit Risk and Banking Insights", "News and trends in credit risk, digital banking and fintech across Nigeria, Africa and the world."),
+  body: `<section class="section"><div class="wrap">${adSlot("blog-top")}
+  <div class="toolbar"><div class="search"><label for="q" class="sr" style="position:absolute;left:-999px">Search posts</label><input id="q" type="search" placeholder="Search posts, e.g. lending rules, recapitalisation" autocomplete="off"></div></div>
+  <div class="chips" role="group" aria-label="Filter by region"><button class="chip" data-cat="All" aria-pressed="true">All</button>${regions.map((c) => `<button class="chip" data-cat="${esc(c)}" aria-pressed="false">${c}</button>`).join("")}</div>
+  <div id="library" class="grid g3">${sortedPosts.map(blogCard).join("")}</div>
+  <div id="empty" class="empty"><h3>No posts match your search</h3><p>Try a different keyword or region. New posts are published regularly.</p></div>
+  <div id="pager" class="pager"></div>
+  <p class="fineprint" style="margin-top:28px"><a href="/blog/rss.xml">RSS feed</a> · Want to reach our readers? <a href="/advertise/">Advertise with us</a></p></div></section>`,
+}));
+for (const a of sortedPosts) {
+  const related = sortedPosts.filter((x) => x.slug !== a.slug).slice(0, 3);
+  const html = a.body.map((b) => (b.h ? `<h2>${esc(b.h)}</h2>` : b.note ? `<p class="post-note">${esc(b.note)}</p>` : b.p ? `<p>${esc(b.p)}</p>` : `<ul>${b.ul.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`));
+  html.splice(Math.min(2, html.length), 0, adSlot("article-inline"));
+  write(`/blog/${a.slug}/`, layout({
+    path: `/blog/${a.slug}/`, title: a.title, desc: a.excerpt, og: "article", head: adsenseHead,
+    schema: [{ "@context": "https://schema.org", "@type": "Article", headline: a.title, description: a.excerpt, datePublished: a.date, author: { "@type": "Organization", name: byline }, publisher: { "@type": "Organization", name: "LearnTern" }, mainEntityOfPage: site.url + `/blog/${a.slug}/` }],
+    hero: `<section class="page-hero"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / <a href="/blog/">Blog</a> / ${esc(a.region)}</div><span class="eyebrow">${esc(a.region)} · ${esc(a.category)}</span><h1 style="max-width:22ch">${esc(a.title)}</h1><div class="article-meta"><span>${fmtDate(a.date)}</span><span>${a.readTime} min read</span><span>By ${esc(byline)}</span></div></div></section>`,
+    body: `<section class="section"><div class="wrap"><div class="article">${html.join("")}
+    ${a.sources?.length ? `<h2>Sources</h2><ul class="sources">${a.sources.map((x) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a></li>`).join("")}</ul>` : ""}
+    ${adSlot("article-end")}
+    <div class="callout"><p><strong>Build your fundamentals.</strong> Explore the Learn library for practical guides on credit analysis, underwriting and portfolio monitoring.</p><a class="btn btn-navy btn-sm" href="/learn/">Browse the Learn library</a></div>
+    <p class="fineprint">This post is for general information and commentary and is not financial, legal or regulatory advice. News and regulations change quickly; check the original sources and official channels before acting.</p></div>
+    <div class="sec-head" style="margin-top:56px"><h2>More from the blog</h2></div><div class="grid g3">${related.map(blogCard).join("")}</div></div></section>`,
+  }));
+}
+writeFileSync(join(OUT, "blog", "rss.xml"), `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>LearnTern Blog</title><link>${site.url}/blog/</link><description>News and trends in credit risk, digital banking and fintech.</description>${sortedPosts.map((a) => `<item><title>${esc(a.title)}</title><link>${site.url}/blog/${a.slug}/</link><guid>${site.url}/blog/${a.slug}/</guid><pubDate>${new Date(a.date).toUTCString()}</pubDate><description>${esc(a.excerpt)}</description></item>`).join("")}</channel></rss>`);
+
+/* ---------- ADVERTISE ---------- */
+write("/advertise/", layout({
+  path: "/advertise/", title: "Advertise with LearnTern", desc: "Reach credit, risk and banking professionals with sponsored placements on the LearnTern blog.",
+  hero: pageHero("Advertise", "Advertise with LearnTern", "Put your brand in front of people who work in and are learning about lending, risk and banking."),
+  body: `<section class="section"><div class="wrap"><div class="sec-head"><span class="eyebrow">Who reads LearnTern</span><h2>Credit, risk and banking professionals</h2><p class="lead">Our readers include credit analysts, loan officers, risk teams and graduates building careers in lending, across Nigeria and the wider region. Ask us for current audience figures.</p></div>
+  <div class="grid g3">${[["Blog top banner", "A banner above the post list on the Blog page."], ["In-article banner", "A banner inside every blog post, after the opening section."], ["Article end", "A placement after the post, before related reading."]].map(([t, d]) => `<div class="card"><h3>${t}</h3><p>${d}</p></div>`).join("")}</div>
+  <div class="grid g2" style="margin-top:32px"><div class="card"><h3>Banner specifications</h3><ul><li>Landscape 16:9 image, at least 1200 px wide</li><li>JPG, PNG or WebP, under 500 KB</li><li>The destination link and the dates you want it to run</li></ul></div>
+  <div class="card"><h3>Advertising standards</h3><ul><li>Every ad is labelled "Sponsored"</li><li>Claims must be accurate and not misleading</li><li>Lenders and other regulated firms must be able to show their registration or licence on request</li><li>We may decline or remove any ad at our discretion</li></ul></div></div></div></section>
+  <section class="section alt"><div class="wrap two-col"><div><span class="eyebrow">Enquiry</span><h2>Tell us about your campaign</h2><p class="lead">Share what you want to promote and when, and we will reply with options and rates.</p></div>
+  <form class="form" data-endpoint="/api/contact" data-source="advertise" novalidate><input type="hidden" name="topic" value="Advertising enquiry">
+  <div class="row2"><div class="field"><label for="a1">Your name</label><input id="a1" name="name" required></div><div class="field"><label for="a2">Work email</label><input id="a2" type="email" name="email" required></div></div>
+  <div class="field"><label for="a3">Company</label><input id="a3" name="organisation" required></div>
+  <div class="field"><label for="a4">What would you like to advertise?</label><textarea id="a4" name="message" required></textarea></div><button class="btn btn-navy" type="submit">Send enquiry</button><p class="form-msg" role="status" aria-live="polite"></p></form></div></section>`,
+}));
 
 /* ---------- 404 + favicon + SEO files ---------- */
 writeFileSync(join(OUT, "404.html"), layout({ path: "/404", title: "Page not found", desc: "Page not found.", noindex: true, hero: pageHero("404", "Page not found", "The page you're looking for doesn't exist or has moved."), body: `<section class="section"><div class="wrap"><a class="btn btn-navy" href="/">Back to homepage</a> <a class="btn btn-outline" href="/learn/">Browse articles</a></div></section>` }));
