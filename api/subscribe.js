@@ -1,9 +1,9 @@
-import { json, validEmail, clean, sendEmail, esc } from './_lib.js';
+import { json, validEmail, clean, sendEmail, esc, looksAutomated } from './_lib.js';
 // Newsletter + free guide + waitlist. Needs: RESEND_API_KEY, EMAIL_FROM. Optional: RESEND_AUDIENCE_ID, FREE_GUIDE_URL, OWNER_EMAIL.
 export default async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
   const b = req.body || {};
-  if (b.hp_extra) return json(res, 200, { message: 'Thank you.' }); // honeypot
+  if (looksAutomated(b)) return json(res, 200, { message: 'Thank you.' });
   const email = clean(b.email, 254).toLowerCase(), firstName = clean(b.firstName, 80);
   if (!validEmail(email)) return json(res, 400, { error: 'Please enter a valid email address.' });
   if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM)
