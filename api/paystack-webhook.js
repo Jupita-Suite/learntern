@@ -20,8 +20,9 @@ export default async function handler(req, res) {
   if (ev.event === 'charge.success') {
     const d = ev.data || {};
     const p = products.find((x) => x.slug === d.metadata?.product), email = d.customer?.email;
-    // Ignore payments that do not match what we sell (wrong product, currency or amount in kobo).
-    if (!p || !p.price || !email || d.status !== 'success' || d.currency !== 'NGN' || d.amount !== Math.round(p.price * 100))
+    // Ignore payments that do not match what we sell (wrong product or currency, or less than the current price in kobo).
+    // Paying the current price or more is accepted, so a customer who started checkout at an earlier, higher price still gets their file.
+    if (!p || !p.price || !email || d.status !== 'success' || d.currency !== 'NGN' || d.amount < Math.round(p.price * 100))
     { console.warn('webhook: ignored charge.success', { product: d.metadata?.product, status: d.status, currency: d.currency, amount: d.amount, hasEmail: !!email }); return json(res, 200, { received: true, ignored: true }); }
     const exp = Date.now() + 72 * 3600 * 1000;
     const token = `${p.slug}.${exp}.` + crypto.createHmac('sha256', process.env.DOWNLOAD_SECRET).update(`${p.slug}.${exp}`).digest('hex');

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   if (!p.price || !process.env.PAYSTACK_SECRET_KEY || !process.env.SITE_URL)
     return json(res, 503, { error: 'Checkout is not open yet. This product will be available to purchase soon.' });
   const siteUrl = process.env.SITE_URL.replace(/\/+$/, '');
-  // Paystack amounts are in kobo (1 NGN = 100 kobo): 12,500 NGN -> 1,250,000.
+  // Paystack amounts are in kobo (1 NGN = 100 kobo): 7,500 NGN -> 750,000.
   const amount = Math.round(p.price * 100);
   const reference = `LT-${p.slug}-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
   let r, d;
