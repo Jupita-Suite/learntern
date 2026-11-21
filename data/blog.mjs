@@ -9,6 +9,50 @@ export const byline = "LearnTern Editorial";
 
 export const posts = [
   {
+    slug: "africa-credit-rating-agency-afcra-what-it-means",
+    title: "Africa's new credit rating agency: what AfCRA could change for borrowers and lenders",
+    category: "Markets",
+    region: "Africa",
+    date: "2026-11-21",
+    readTime: 6,
+    excerpt: "The Africa Credit Rating Agency says its first sovereign ratings will arrive by the end of March. Here is what it plans, the criticism it faces, and what credit professionals should watch.",
+    body: [
+      { p: "A new rating agency built in Africa, for African borrowers, launched in October. The Africa Credit Rating Agency (AfCRA), based in Port Louis, Mauritius, says it will rate African governments and companies using more local data and expertise. According to Al Jazeera (21 November) and Reuters (3 November), it is in talks with 15 governments and expects to publish its first sovereign ratings by the end of March." },
+      { h: "What AfCRA is, and is not" },
+      { ul: [
+        "It launched in October 2026 and is based in Mauritius. Al Jazeera reports that the African Union launched it on 7 October, following an initiative African leaders endorsed in 2017. Reuters dates the original initiative to 2018, so reports differ on that detail.",
+        "It is privately owned and self-funded, and governments are barred from holding shares. Reuters reports that it is owned by Plus 94 Research, a South African firm co-founded by interim chief executive Sifiso Falala, and that it has bought 51% of Sovereign Africa Ratings, a firm Falala founded and runs. It aims to raise $15 million through a share sale that would give African investors two-thirds ownership.",
+        "Beyond governments, it plans to rate companies, municipalities, banks and local-currency debt, and Reuters says multilateral lenders such as Afreximbank are on the list.",
+        "Its sovereign ratings will be solicited, meaning governments pay for them and provide officials and financial data.",
+      ] },
+      { h: "The case for it" },
+      { ul: [
+        "African governments argue that international rating methodologies do not reflect the continent's economic structures. Falala points out that many African countries hold speculative-grade ratings even though they have never defaulted on sovereign debt.",
+        "A 2023 UNDP study, as cited by Al Jazeera, estimated that subjectivity in sovereign ratings costs African countries $74.5 billion through higher interest payments and lost lending.",
+        "Abdussalam Muazu of the Institute of Chartered Economists of Nigeria told Al Jazeera that the big agencies have few analysts on the ground and struggle to measure informal trade and mobile money, so limited information leads investors to price in extra uncertainty.",
+      ] },
+      { h: "The case for caution" },
+      { ul: [
+        "Moody's, S&P and Fitch reject the idea that they systematically disadvantage African borrowers. At a June Chatham House discussion, Moody's Marie Diron said African and non-African borrowers with the same rating have broadly similar default probabilities, citing about 5% over one year for a B rating. Reuters notes that a 2024 investigation of its own found no evidence of systemic bias.",
+        "Independence will be tested. A solicited model means the rated party pays, and Reuters reports that AfCRA's owner and its new affiliate are both tied to the same person. Al Jazeera says the defining test will be whether the agency can hold an unfavourable rating when a government objects.",
+        "Whether new ratings lower borrowing costs depends on investor trust, which takes time to build. The reporting we reviewed does not mention any regulatory recognition for AfCRA.",
+        "Falala has said the aim is not \"to manufacture better ratings for Africa\" but to be more accurate. Whether it will be more accurate is not yet known.",
+      ] },
+      { h: "What credit professionals should watch" },
+      { note: "This section is LearnTern's view, not a finding of the sources." },
+      { ul: [
+        "The first ratings, due by the end of March. The useful question is where they differ from the established agencies, and why, rather than whether they are higher or lower.",
+        "Track record. A rating is an opinion that earns credibility over years of default and migration data, not at launch.",
+        "Methodology and incentives. Whenever you rely on a rating, know what data it uses, how it is built and who pays for it.",
+      ] },
+      { p: "For lenders, sovereign ratings matter because they shape country risk premiums and the funding costs of banks and companies in that country. Until investors and regulators accept a new agency's ratings, it would be premature to change internal models or limits because of them." },
+    ],
+    sources: [
+      { title: "Al Jazeera: Can Africa's new credit rating agency change how the continent is assessed? (21 November 2026)", url: "https://www.aljazeera.com/news/2026/11/21/can-africas-new-credit-rating-agency-change-how-the-continent-is-assessed" },
+      { title: "Reuters via CNBC Africa: New Africa credit rating agency in talks with 15 sovereign borrowers (3 November 2026)", url: "https://www.cnbcafrica.com/2026/new-africa-credit-rating-agency-in-talks-with-15-sovereign-borrowers" },
+    ],
+  },
+  {
     slug: "nigeria-digital-lending-rules-back-in-force",
     title: "Nigeria's digital lending rules are back in force: what lenders and borrowers should check",
     category: "Regulation",

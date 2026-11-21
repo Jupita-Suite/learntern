@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { site, products, courses } from "./data/site.mjs";
 import { articles, categories } from "./data/articles.mjs";
 import { refundPolicy, refundUpdated } from "./data/refund-policy.mjs";
+import { privacyPolicy, cookiePolicy, terms, legalUpdated } from "./data/legal.mjs";
 import { posts, regions, byline } from "./data/blog.mjs";
 import { ads, adsense } from "./data/ads.mjs";
 
@@ -44,7 +45,10 @@ const ico = {
 const icon = (k) => `<span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true">${ico[k]}</svg></span>`;
 
 const hash = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+const cardImg = (slug) => (existsSync(join("public", "assets", "cards", `${slug}.png`)) ? `/assets/cards/${slug}.png` : "");
 function thumb(a) {
+  const img = cardImg(a.slug);
+  if (img) return `<div class="thumb"><img src="${img}" alt="" width="960" height="540" loading="lazy" decoding="async"></div>`;
   const h = hash(a.slug), v = h % 4;
   const shapes = [
     `<g stroke="#D6A94F" stroke-opacity=".5" fill="none">${[0,1,2,3,4].map(i=>`<circle cx="${250+i*8}" cy="90" r="${20+i*18}"/>`).join("")}</g>`,
@@ -69,7 +73,7 @@ const priceText = (p) => !p.price ? p.pricePlaceholder
 /* ---------- layout ---------- */
 const navItems = [["Home", "/"], ["Learn", "/learn/"], ["Blog", "/blog/"], ["Books & Resources", "/books/"], ["Interview Preparation", "/interview-preparation/"], ["Courses", "/courses/"], ["About", "/about/"]];
 
-function layout({ path, title, desc, body, og = "website", schema = [], hero = "", noindex = false, head = "" }) {
+function layout({ path, title, desc, body, og = "website", schema = [], hero = "", noindex = false, head = "", image = "" }) {
   const full = title.includes("LearnTern") ? title : `${title} | LearnTern`;
   const canonical = site.url + path;
   if (!noindex) urls.push(path);
@@ -79,7 +83,7 @@ function layout({ path, title, desc, body, og = "website", schema = [], hero = "
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(full)}</title><meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${canonical}">${noindex ? '<meta name="robots" content="noindex">' : ""}
-<meta property="og:site_name" content="LearnTern"><meta property="og:type" content="${og}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${site.url}/assets/credit-risk-101.webp">
+<meta property="og:site_name" content="LearnTern"><meta property="og:type" content="${og}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${site.url}${image || "/assets/credit-risk-101.webp"}">
 <meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#142B4D">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -101,7 +105,7 @@ ${head}</head><body>
 <div class="social" aria-label="Social media">${[["linkedin", "in"], ["x", "X"], ["instagram", "ig"], ["youtube", "yt"]].map(([k, t]) => `<a href="${site.social[k]}" aria-label="LearnTern on ${k}" rel="noopener">${t}</a>`).join("")}</div></div>
 <div><h4>Platform</h4><ul><li><a href="/about/">About LearnTern</a></li><li><a href="/learn/">Learn</a></li><li><a href="/blog/">Blog</a></li><li><a href="/books/">Books &amp; Resources</a></li><li><a href="/interview-preparation/">Interview Preparation</a></li><li><a href="/courses/">Courses</a></li></ul></div>
 <div><h4>Business</h4><ul><li><a href="/corporate-training/">Corporate Training</a></li><li><a href="/advertise/">Advertise with us</a></li><li><a href="/contact/">Contact</a></li><li><a href="/account/">Customer Account</a></li></ul></div>
-<div><h4>Legal</h4><ul><li><a href="/refund-policy/">Refund Policy</a></li>${""/* Privacy Policy and Terms hidden for now: <li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li> */}</ul></div>
+<div><h4>Legal</h4><ul><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/cookie-policy/">Cookie Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li><li><a href="/refund-policy/">Refund Policy</a></li></ul></div>
 </div><div class="foot-bottom"><span>© ${new Date().getFullYear()} LearnTern. All rights reserved.</span><span>Educational content only. Not financial, legal or regulatory advice.</span></div></div></footer>
 <script src="/js/main.js" defer></script></body></html>`;
 }
@@ -206,7 +210,7 @@ for (const a of articles) {
   const related = articles.filter((x) => x.slug !== a.slug && x.category === a.category).concat(articles.filter((x) => x.slug !== a.slug && x.category !== a.category)).slice(0, 3);
   const body = a.body.map((b) => (b.h ? `<h2>${esc(b.h)}</h2>` : b.p ? `<p>${esc(b.p)}</p>` : `<ul>${b.ul.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`)).join("");
   write(`/learn/${a.slug}/`, layout({
-    path: `/learn/${a.slug}/`, title: a.title, desc: a.excerpt, og: "article",
+    path: `/learn/${a.slug}/`, title: a.title, desc: a.excerpt, og: "article", image: cardImg(a.slug),
     schema: [{ "@context": "https://schema.org", "@type": "Article", headline: a.title, description: a.excerpt, datePublished: a.date, author: { "@type": "Person", name: "Williams Adeyemi" }, publisher: { "@type": "Organization", name: "LearnTern" }, mainEntityOfPage: site.url + `/learn/${a.slug}/` }],
     hero: `<section class="page-hero"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / <a href="/learn/">Learn</a> / ${esc(a.category)}</div><span class="eyebrow">${esc(a.category)}</span><h1 style="max-width:20ch">${esc(a.title)}</h1><div class="article-meta"><span>${fmtDate(a.date)}</span><span>${a.readTime} min read</span><span>By Williams Adeyemi</span></div></div></section>`,
     body: `<section class="section"><div class="wrap"><div class="article">${body}
@@ -333,10 +337,12 @@ write("/refund-policy/", layout({
   body: `<section class="section"><div class="wrap prose">${refundPolicy.map((sec) => `<h2>${esc(sec.h)}</h2>${sec.body.map(renderBlock).join("")}`).join("")}<p class="fineprint">Last updated ${fmtDate(refundUpdated)}.</p></div></section>`,
 }));
 
-/* ---------- LEGAL (Privacy Policy and Terms hidden for now. Remove the "// " prefixes to restore) ---------- */
-// const legal = (path, title, paras) => write(path, layout({ path, title, desc: `${title} for LearnTern.`, hero: pageHero(title, title, ""), body: `<section class="section"><div class="wrap prose"><p><span class="pill-note">Draft: requires legal review before launch</span></p>${paras.map(([h, p]) => `<h2>${h}</h2><p>${p}</p>`).join("")}<p class="fineprint">Last updated ${fmtDate("2026-11-16")}.</p></div></section>` }));
-// legal("/privacy-policy/", "Privacy Policy", [["What we collect", "Details you provide through forms (name, email, enquiry content) and standard analytics data if analytics is enabled."], ["How we use it", "To deliver purchases and free resources, respond to enquiries, send updates you request and improve the site. You can unsubscribe at any time."], ["Your rights", "You may request access, correction or deletion of your personal data. Contact us using the details on the Contact page. This policy should be aligned with the Nigeria Data Protection Act and, when expanding, UK/EU GDPR."]]);
-// legal("/terms/", "Terms and Conditions", [["Use of the site", "Content is provided for general education and is not financial, legal or regulatory advice."], ["Digital products", "Purchases are licensed for personal use. Redistribution, resale or sharing of download links is not permitted."], ["Liability", "To be completed with legal advice."]]);
+/* ---------- LEGAL ---------- */
+const legal = (path, title, desc, sections) => write(path, layout({ path, title, desc, hero: pageHero(title, title, ""),
+  body: `<section class="section"><div class="wrap prose">${sections.map((sec) => `<h2>${esc(sec.h)}</h2>${sec.body.map(renderBlock).join("")}`).join("")}<p class="fineprint">Last updated ${fmtDate(legalUpdated)}.</p></div></section>` }));
+legal("/privacy-policy/", "Privacy Policy", "How LearnTern collects, uses and protects your personal data, and your rights under the Nigeria Data Protection Act.", privacyPolicy);
+legal("/cookie-policy/", "Cookie Policy", "How LearnTern and its partners use cookies and similar technologies, and how to manage them.", cookiePolicy);
+legal("/terms/", "Terms and Conditions", "The terms that apply when you use LearnTern or buy our digital products.", terms);
 
 /* ---------- ADS ---------- */
 const today0 = new Date().toISOString().slice(0, 10);
@@ -375,7 +381,7 @@ for (const a of sortedPosts) {
   const html = a.body.map((b) => (b.h ? `<h2>${esc(b.h)}</h2>` : b.note ? `<p class="post-note">${esc(b.note)}</p>` : b.p ? `<p>${esc(b.p)}</p>` : `<ul>${b.ul.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`));
   html.splice(Math.min(2, html.length), 0, adSlot("article-inline"));
   write(`/blog/${a.slug}/`, layout({
-    path: `/blog/${a.slug}/`, title: a.title, desc: a.excerpt, og: "article", head: adsenseHead,
+    path: `/blog/${a.slug}/`, title: a.title, desc: a.excerpt, og: "article", head: adsenseHead, image: cardImg(a.slug),
     schema: [{ "@context": "https://schema.org", "@type": "Article", headline: a.title, description: a.excerpt, datePublished: a.date, author: { "@type": "Organization", name: byline }, publisher: { "@type": "Organization", name: "LearnTern" }, mainEntityOfPage: site.url + `/blog/${a.slug}/` }],
     hero: `<section class="page-hero"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / <a href="/blog/">Blog</a> / ${esc(a.region)}</div><span class="eyebrow">${esc(a.region)} · ${esc(a.category)}</span><h1 style="max-width:22ch">${esc(a.title)}</h1><div class="article-meta"><span>${fmtDate(a.date)}</span><span>${a.readTime} min read</span><span>By ${esc(byline)}</span></div></div></section>`,
     body: `<section class="section"><div class="wrap"><div class="article">${html.join("")}
