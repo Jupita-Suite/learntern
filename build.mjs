@@ -61,7 +61,10 @@ const articleCard = (a) => `<article class="card" data-title="${esc(a.title)}" d
 const productMedia = (p, mini = false) =>
   p.image ? `<img class="product-img" src="${p.image}" alt="${esc(p.name)} book cover" width="1000" height="1073" loading="lazy">`
   : `<div class="mini-cover" role="img" aria-label="${esc(p.name)} cover (placeholder design)"><small>${esc(p.cover.kicker)}</small><strong>${esc(p.cover.title)}</strong></div>`;
-const priceText = (p) => (p.price ? `₦${p.price.toLocaleString("en-NG")}` : p.pricePlaceholder);
+const naira = (n) => `₦${n.toLocaleString("en-NG")}`;
+const priceText = (p) => !p.price ? p.pricePlaceholder
+  : p.originalPrice > p.price ? `<s class="price-was"><span class="sr-only">Was </span>${naira(p.originalPrice)}</s> <span class="price-now"><span class="sr-only">Now </span>${naira(p.price)}</span> <span class="promo-badge">Promo</span>`
+  : naira(p.price);
 
 /* ---------- layout ---------- */
 const navItems = [["Home", "/"], ["Learn", "/learn/"], ["Blog", "/blog/"], ["Books & Resources", "/books/"], ["Interview Preparation", "/interview-preparation/"], ["Courses", "/courses/"], ["About", "/about/"]];

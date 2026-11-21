@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const d = await r.json();
     const t = d.data;
     const p = products.find((x) => x.slug === t?.metadata?.product);
-    const ok = r.ok && t?.status === 'success' && p && t.currency === 'NGN' && t.amount === Math.round(p.price * 100);
+    const ok = r.ok && t?.status === 'success' && p && t.currency === 'NGN' && t.amount >= Math.round(p.price * 100);
     return json(res, 200, { status: ok ? 'success' : t?.status === 'abandoned' || t?.status === 'failed' ? t.status : 'pending' });
   } catch {
     return json(res, 200, { status: 'pending' });

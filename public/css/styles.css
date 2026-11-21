@@ -236,3 +236,9 @@ p{margin:0 0 1em}
 .article .ad{margin:32px 0}
 .post-note{font-size:14px;font-style:italic;color:#5D6B82;border-left:3px solid #D6A94F;padding-left:14px}
 .sources{padding-left:20px}.sources li{margin-bottom:8px;font-size:15px}
+
+/* Promo price */
+.price-was{font-weight:500;font-size:.78em;opacity:.6;margin-right:6px;text-decoration:line-through;text-decoration-thickness:2px}
+.price-now{font-weight:800}
+.promo-badge{display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 8px;border-radius:999px;background:#D6A94F;color:#142B4D;font:700 .62rem var(--f-head);letter-spacing:.08em;text-transform:uppercase}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
