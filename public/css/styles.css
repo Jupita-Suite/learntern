@@ -247,5 +247,25 @@ p{margin:0 0 1em}
 .sub-box{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;background:var(--navy,#0f2447);color:#fff;border-radius:16px;padding:28px 32px;margin:40px 0}
 .sub-box h3{margin:0 0 6px;color:#fff;font-size:1.25rem}.sub-box p{margin:0;color:#c9d4e6}
 .sub-box .inline{display:flex;gap:10px}.sub-box .inline input{flex:1;min-width:0}
-.sub-box .fineprint,.sub-box .fineprint a{color:#9fb0c9;margin-top:8px}.sub-box .form-msg{color:#fff}
+.sub-box .fineprint,.sub-box .fineprint a{color:#9fb0c9;margin-top:8px}
 @media(max-width:820px){.sub-box{grid-template-columns:1fr;padding:22px}.sub-box .inline{flex-direction:column}}
+
+/* Header dropdown */
+.nav-links{gap:10px}
+.nav-links a{padding:10px 16px}
+.nav-links>li{position:relative}
+.dd-link{display:inline-flex;align-items:center;gap:7px}.dd-link .chev{transition:transform .2s;opacity:.7}
+.dd-toggle{display:none}
+.dd{position:absolute;top:100%;left:0;min-width:270px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 40px rgba(14,31,58,.14);padding:8px;margin-top:6px;opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .18s,transform .18s,visibility .18s;z-index:60}
+.dd::before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px}
+.has-dd:hover .dd,.has-dd:focus-within .dd,.has-dd.open .dd{opacity:1;visibility:visible;transform:none}
+.has-dd:hover .chev,.has-dd:focus-within .chev,.has-dd.open .chev{transform:rotate(180deg)}
+.nav-links .dd a{display:block;padding:11px 14px;border-radius:8px;box-shadow:none;white-space:normal}
+.nav-links .dd a strong{display:block;font:700 .93rem var(--f-head);color:var(--navy)}
+.nav-links .dd a span{display:block;font:400 .82rem var(--f-body,inherit);color:var(--muted,#5b6b82);margin-top:2px}
+.nav-links .dd a:hover{background:var(--bg)}
+.mm-group{border-bottom:1px solid var(--line);padding:12px 0 4px}
+.mm-group>span{display:block;font:700 .75rem var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:#B8892B}
+.mm-group a{padding-left:14px;border-bottom:0}
+@media(max-width:1280px){.nav-links{gap:2px}.nav-links a{padding:10px 12px}}
+.mobile-menu .btn{text-align:center}
