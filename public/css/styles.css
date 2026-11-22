@@ -243,3 +243,9 @@ p{margin:0 0 1em}
 .price-now{font-weight:800}
 .promo-badge{display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 8px;border-radius:999px;background:#D6A94F;color:#142B4D;font:700 .62rem var(--f-head);letter-spacing:.08em;text-transform:uppercase}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.sub-box{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;background:var(--navy,#0f2447);color:#fff;border-radius:16px;padding:28px 32px;margin:40px 0}
+.sub-box h3{margin:0 0 6px;color:#fff;font-size:1.25rem}.sub-box p{margin:0;color:#c9d4e6}
+.sub-box .inline{display:flex;gap:10px}.sub-box .inline input{flex:1;min-width:0}
+.sub-box .fineprint,.sub-box .fineprint a{color:#9fb0c9;margin-top:8px}.sub-box .form-msg{color:#fff}
+@media(max-width:820px){.sub-box{grid-template-columns:1fr;padding:22px}.sub-box .inline{flex-direction:column}}

@@ -27,3 +27,18 @@ Static site (Node build) + Vercel serverless forms/checkout. Deploy: push to Git
 | Legal pages (drafts) | legal review |
 | Customer accounts / order history | auth provider needed |
 | Interview Pack, Bundle covers and files; sample downloads | to produce |
+
+## Email subscribers and new-post notifications
+
+Subscribe boxes sit on the blog, every blog post, every Learn article and the home page. Sign-ups go to `/api/subscribe`, which saves them in your Resend audience (set `RESEND_AUDIENCE_ID`), sends a welcome email, and also emails the owner a copy if the audience is not configured, so no sign-up is lost.
+
+To notify subscribers about a new post or article (after it is live):
+
+```
+RESEND_API_KEY=... RESEND_AUDIENCE_ID=... NEWSLETTER_FROM="LearnTern <updates@learntern.co>" node tools/notify.mjs <slug>          # creates a draft broadcast to review
+RESEND_API_KEY=... RESEND_AUDIENCE_ID=... NEWSLETTER_FROM="LearnTern <updates@learntern.co>" node tools/notify.mjs <slug> --send   # sends it
+```
+
+Every broadcast carries Resend's one-click unsubscribe link.
+
+Optional `NEWSLETTER_FROM` (e.g. `LearnTern <updates@learntern.co>`) is the sender for the welcome email and post notifications; replies go to hello@learntern.co. Order and contact emails keep using `EMAIL_FROM`. It must be an address on your Resend-verified domain.

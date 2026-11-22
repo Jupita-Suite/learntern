@@ -124,6 +124,11 @@ const leadForm = (src, label = "Get the Free Guide") => `<form class="form" data
   <button class="btn btn-gold" type="submit">${label}</button><p class="form-msg" role="status" aria-live="polite"></p>
   <p class="fineprint" style="color:#9fb0c9">We use your details to send the guide and occasional learning updates. Unsubscribe any time.</p></form>`;
 
+const subBox = (src, h = "Get new posts and articles by email", p = "New credit risk articles and blog posts, straight to your inbox. No spam, unsubscribe any time.") => `<aside class="sub-box"><div><h3>${h}</h3><p>${p}</p></div>
+  <form class="form" data-endpoint="/api/subscribe" data-source="${src}" novalidate><input type="hidden" name="intent" value="updates">
+  <div class="inline"><div class="field" style="flex:1"><label for="sb-${src}" class="sr-only">Email address</label><input id="sb-${src}" name="email" type="email" placeholder="Your email address" required autocomplete="email"></div><button class="btn btn-gold" type="submit">Notify me</button></div>
+  <p class="form-msg" role="status" aria-live="polite"></p><p class="fineprint">By subscribing you agree to our <a href="/privacy-policy/">Privacy Policy</a>.</p></form></aside>`;
+
 /* ---------- HOME ---------- */
 const book = products[0];
 const latest = [...articles].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
@@ -214,6 +219,7 @@ for (const a of articles) {
     schema: [{ "@context": "https://schema.org", "@type": "Article", headline: a.title, description: a.excerpt, datePublished: a.date, author: { "@type": "Person", name: "Williams Adeyemi" }, publisher: { "@type": "Organization", name: "LearnTern" }, mainEntityOfPage: site.url + `/learn/${a.slug}/` }],
     hero: `<section class="page-hero"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / <a href="/learn/">Learn</a> / ${esc(a.category)}</div><span class="eyebrow">${esc(a.category)}</span><h1 style="max-width:20ch">${esc(a.title)}</h1><div class="article-meta"><span>${fmtDate(a.date)}</span><span>${a.readTime} min read</span><span>By Williams Adeyemi</span></div></div></section>`,
     body: `<section class="section"><div class="wrap"><div class="article">${body}
+    ${subBox("learn-article")}
     <div class="callout"><p><strong>Build on this with the book.</strong> Credit Risk 101 walks through these ideas with practical examples for the Nigerian lending market.</p><a class="btn btn-navy btn-sm" href="/books/credit-risk-101/">Explore Credit Risk 101</a></div>
     <p class="fineprint">This article is for general education and does not constitute financial, legal or regulatory advice. Definitions and regulatory thresholds vary by institution and change over time; always confirm current requirements.</p></div></div></section>
     <section class="section alt"><div class="wrap"><h2>Keep learning</h2><div class="grid g3">${related.map(articleCard).join("")}</div></div></section>`,
@@ -374,6 +380,7 @@ write("/blog/", layout({
   <div id="library" class="grid g3">${sortedPosts.map(blogCard).join("")}</div>
   <div id="empty" class="empty"><h3>No posts match your search</h3><p>Try a different keyword or region. New posts are published regularly.</p></div>
   <div id="pager" class="pager"></div>
+  ${subBox("blog-index")}
   <p class="fineprint" style="margin-top:28px"><a href="/blog/rss.xml">RSS feed</a> · Want to reach our readers? <a href="/advertise/">Advertise with us</a></p></div></section>`,
 }));
 for (const a of sortedPosts) {
@@ -387,6 +394,7 @@ for (const a of sortedPosts) {
     body: `<section class="section"><div class="wrap"><div class="article">${html.join("")}
     ${a.sources?.length ? `<h2>Sources</h2><ul class="sources">${a.sources.map((x) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a></li>`).join("")}</ul>` : ""}
     ${adSlot("article-end")}
+    ${subBox("blog-post")}
     <div class="callout"><p><strong>Build your fundamentals.</strong> Explore the Learn library for practical guides on credit analysis, underwriting and portfolio monitoring.</p><a class="btn btn-navy btn-sm" href="/learn/">Browse the Learn library</a></div>
     <p class="fineprint">This post is for general information and commentary and is not financial, legal or regulatory advice. News and regulations change quickly; check the original sources and official channels before acting.</p></div>
     <div class="sec-head" style="margin-top:56px"><h2>More from the blog</h2></div><div class="grid g3">${related.map(blogCard).join("")}</div></div></section>`,
