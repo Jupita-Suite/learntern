@@ -71,7 +71,13 @@ const priceText = (p) => !p.price ? p.pricePlaceholder
   : naira(p.price);
 
 /* ---------- layout ---------- */
-const navItems = [["Home", "/"], ["Learn", "/learn/"], ["Blog", "/blog/"], ["Books & Resources", "/books/"], ["Interview Preparation", "/interview-preparation/"], ["Courses", "/courses/"], ["About", "/about/"]];
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "Learn", href: "/learn/", children: [["Learn Library", "/learn/", "Practical credit risk articles"], ["Interview Preparation", "/interview-preparation/", "Questions, tips and guides"], ["Courses", "/courses/", "Join the waitlist"]] },
+  { label: "Blog", href: "/blog/" },
+  { label: "Books & Resources", href: "/books/" },
+  { label: "About", href: "/about/" },
+];
 
 function layout({ path, title, desc, body, og = "website", schema = [], hero = "", noindex = false, head = "", image = "" }) {
   const full = title.includes("LearnTern") ? title : `${title} | LearnTern`;
@@ -95,10 +101,12 @@ ${!site.gtmId && site.gaId ? `<script async src="https://www.googletagmanager.co
 ${head}</head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap"><div class="nav">${logo}
-<nav aria-label="Main"><ul class="nav-links">${navItems.map(([l, h]) => `<li><a href="${h}"${cur(h)}>${l}</a></li>`).join("")}</ul></nav>
+<nav aria-label="Main"><ul class="nav-links">${navItems.map((n) => n.children
+  ? `<li class="has-dd"><a href="${n.href}"${n.children.some((c) => c[1] === path || path.startsWith(c[1])) ? ' aria-current="page"' : ""} class="dd-link">${n.label}<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="dd">${n.children.map(([l, h, d]) => `<a href="${h}"><strong>${l}</strong><span>${d}</span></a>`).join("")}</div></li>`
+  : `<li><a href="${n.href}"${cur(n.href)}>${n.label}</a></li>`).join("")}</ul></nav>
 <div class="nav-cta"><a class="signin" href="/account/">Sign In</a><a class="btn btn-gold btn-sm" href="/books/">Explore Resources</a></div>
 <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div>
-<div class="mobile-menu">${navItems.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}<a href="/account/">Sign In</a><a class="btn btn-gold" href="/books/">Explore Resources</a></div></div></header>
+<div class="mobile-menu">${navItems.map((n) => n.children ? `<div class="mm-group"><span>${n.label}</span>${n.children.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}</div>` : `<a href="${n.href}">${n.label}</a>`).join("")}<a href="/account/">Sign In</a><a class="btn btn-gold" href="/books/">Explore Resources</a></div></div></header>
 <main id="main">${hero}${body}</main>
 <footer class="footer"><div class="wrap"><div class="foot-grid">
 <div>${logo}<p style="margin-top:16px;max-width:34ch">${site.tagline}<br>Practical credit risk education for the next generation of credit professionals.</p>
