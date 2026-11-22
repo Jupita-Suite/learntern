@@ -42,3 +42,9 @@ RESEND_API_KEY=... RESEND_AUDIENCE_ID=... NEWSLETTER_FROM="LearnTern <updates@le
 Every broadcast carries Resend's one-click unsubscribe link.
 
 Optional `NEWSLETTER_FROM` (e.g. `LearnTern <updates@learntern.co>`) is the sender for the welcome email and post notifications; replies go to hello@learntern.co. Order and contact emails keep using `EMAIL_FROM`. It must be an address on your Resend-verified domain.
+
+### Automatic subscriber notifications
+
+`.github/workflows/notify-subscribers.yml` runs after every merge to `main` that touches `data/blog.mjs` or `data/articles.mjs`. It compares with the previous commit, and for each **new** post or article it waits until the page is live, then emails your Resend audience (`tools/notify-new.mjs`). Edits to existing posts never re-send. Posts dated in the future are skipped.
+
+One-time setup: GitHub repo, Settings, Secrets and variables, Actions, add secrets `RESEND_API_KEY`, `RESEND_AUDIENCE_ID` and `NEWSLETTER_FROM` (e.g. `LearnTern <updates@learntern.co>`). Without them the workflow does nothing. Test without sending: `node tools/notify-new.mjs <older-commit-sha> --dry`.

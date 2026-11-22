@@ -1,0 +1,29 @@
+name: Notify subscribers of new posts
+# Runs after a merge to main. If the merge added a new blog post or Learn article, emails your Resend audience once the page is live.
+# One-time setup: GitHub repo > Settings > Secrets and variables > Actions > add secrets RESEND_API_KEY, RESEND_AUDIENCE_ID, NEWSLETTER_FROM.
+on:
+  push:
+    branches: [main]
+    paths: ["data/blog.mjs", "data/articles.mjs"]
+concurrency: notify-subscribers
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Check secrets
+        id: s
+        env: { K: "${{ secrets.RESEND_API_KEY }}", A: "${{ secrets.RESEND_AUDIENCE_ID }}", F: "${{ secrets.NEWSLETTER_FROM }}" }
+        run: |
+          if [ -z "$K" ] || [ -z "$A" ] || [ -z "$F" ]; then echo "Secrets not set, skipping."; echo "ok=false" >> "$GITHUB_OUTPUT"; else echo "ok=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Email subscribers about new posts
+        if: steps.s.outputs.ok == 'true'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_AUDIENCE_ID: ${{ secrets.RESEND_AUDIENCE_ID }}
+          NEWSLETTER_FROM: ${{ secrets.NEWSLETTER_FROM }}
+        run: node tools/notify-new.mjs "${{ github.event.before }}"
