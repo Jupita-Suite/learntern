@@ -49,6 +49,36 @@
     }).catch(function(){note.className='form-msg';note.textContent='We could not confirm your payment status right now. If you were charged, your download link will be emailed shortly.'});
   })();
 
+  // Payment success page: confirm the payment with Paystack (via /api/verify) and show the right message.
+  (function(){
+    var box=document.getElementById('pay-status');if(!box)return;
+    var qs=new URLSearchParams(location.search),ref=qs.get('reference')||qs.get('trxref'),
+      title=document.getElementById('pay-title'),lead=document.getElementById('pay-lead'),steps=document.getElementById('pay-steps'),refEl=document.getElementById('pay-ref'),tries=0;
+    if(ref&&refEl)refEl.textContent='('+ref+')';
+    function set(state,t,l,showSteps){box.setAttribute('data-state',state);title.textContent=t;lead.textContent=l;if(steps)steps.style.display=showSteps?'':'none'}
+    if(!ref){set('success','Thank you for your purchase','If your payment went through, your download link is on its way to your email.',true);return}
+    function check(){
+      fetch('/api/verify?reference='+encodeURIComponent(ref)).then(function(r){return r.json()}).then(function(j){
+        if(j.status==='success'){
+          set('success','Payment successful. Thank you!','Your download link has been sent to your email.',true);
+          try{if(!sessionStorage.getItem('lt_paid_'+ref)){sessionStorage.setItem('lt_paid_'+ref,'1');if(window.dataLayer)window.dataLayer.push({event:'purchase',reference:ref})}}catch(e){}
+        }else if(j.status==='abandoned'||j.status==='failed'){
+          set('failed','Your payment was not completed','You have not been charged. You can go back and try again.',false);
+          var a=box.querySelector('.pay-actions');if(a&&qs.get('product'))a.innerHTML='<a class="btn btn-gold" href="/books/'+encodeURIComponent(qs.get('product'))+'/">Try again</a><a class="btn btn-outline" href="/contact/">Contact support</a>';
+        }else if(++tries<6){setTimeout(check,4000)}
+        else set('pending','We are still confirming your payment','If you were charged, your download link will be emailed shortly. Check your inbox and spam folder.',true);
+      }).catch(function(){set('pending','Payment received, status unavailable','If you were charged, your download link will be emailed shortly. Check your inbox and spam folder.',true)});
+    }
+    check();
+  })();
+
+  // Product page: shown when the buyer cancels on Paystack and returns.
+  (function(){
+    var qs=new URLSearchParams(location.search),box=document.querySelector('.buy-box');
+    if(qs.get('checkout')!=='cancelled'||!box)return;
+    var n=document.createElement('p');n.className='form-msg';n.setAttribute('role','status');n.textContent='Checkout cancelled. You have not been charged. You can try again whenever you are ready.';box.insertBefore(n,box.firstChild);
+  })();
+
   // Learn library: search, filter, pagination
   var lib=document.getElementById('library');
   if(lib){

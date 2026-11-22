@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { json, sendEmail, esc } from './_lib.js';
 import { products } from '../data/site.mjs';
+import { orderEmail } from './_email.js';
 // Paystack webhook: verifies signature, confirms the paid amount matches the product price,
 // then emails a time-limited signed download link.
 // Needs: PAYSTACK_SECRET_KEY, DOWNLOAD_SECRET, SITE_URL, RESEND_API_KEY, EMAIL_FROM, and FILE_URL_<SLUG> per product (e.g. FILE_URL_CREDIT_RISK_101, a private file URL).
@@ -26,7 +27,10 @@ export default async function handler(req, res) {
     { console.warn('webhook: ignored charge.success', { product: d.metadata?.product, status: d.status, currency: d.currency, amount: d.amount, hasEmail: !!email }); return json(res, 200, { received: true, ignored: true }); }
     const exp = Date.now() + 72 * 3600 * 1000;
     const token = `${p.slug}.${exp}.` + crypto.createHmac('sha256', process.env.DOWNLOAD_SECRET).update(`${p.slug}.${exp}`).digest('hex');
-    const sent = await sendEmail({ to: email, subject: `Your LearnTern order: ${p.name}`, html: `<p>Thank you for your purchase of <strong>${esc(p.name)}</strong>.</p><p><a href="${esc(String(process.env.SITE_URL).replace(/\/+$/, ''))}/api/download?token=${token}">Download your file</a> (link valid for 72 hours).</p><p>Payment reference: ${esc(d.reference || '')}. Need help? Reply to this email or contact support.</p>` });
+    const siteUrl = String(process.env.SITE_URL).replace(/\/+$/, '');
+    const sent = await sendEmail({ to: email, subject: `Your LearnTern order: ${p.name}`, html: orderEmail({
+      productName: p.name, name: String(d.metadata?.name || '').slice(0, 80), reference: d.reference, siteUrl,
+      downloadUrl: `${siteUrl}/api/download?token=${token}`, imageUrl: p.slug === 'credit-risk-101' ? `${siteUrl}/assets/email/${p.slug}.jpg` : '' }) });
     // A non-200 makes Paystack retry the webhook, so a failed email does not silently lose the order.
     if (!sent) return json(res, 502, { error: 'Email could not be sent' });
     console.log('webhook: download email sent for reference', d.reference);

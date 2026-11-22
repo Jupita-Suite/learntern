@@ -336,6 +336,26 @@ write("/contact/", layout({
 }));
 
 /* ---------- ACCOUNT ---------- */
+/* ---------- PAYMENT SUCCESS (Paystack redirects here after paying) ---------- */
+write("/payment-success/", layout({ path: "/payment-success/", title: "Payment received", desc: "Your LearnTern payment status.", noindex: true,
+  body: `<section class="section"><div class="wrap pay-wrap">
+  <div class="pay-card" id="pay-status" data-state="checking">
+    <div class="pay-icon" aria-hidden="true">&#10003;</div>
+    <h1 id="pay-title">Thank you. We are confirming your payment…</h1>
+    <p id="pay-lead" class="lead">This only takes a few seconds. Please do not close this page.</p>
+    <noscript><p>Thank you. If your payment went through, your download link is being emailed to you.</p></noscript>
+    <div class="pay-steps" id="pay-steps">
+      <h2>What happens next</h2>
+      <ol>
+        <li><strong>Check your email inbox</strong> for a message titled <em>"Your LearnTern order"</em>. It contains your download button and usually arrives within a few minutes.</li>
+        <li><strong>Can't see it?</strong> Look in your <strong>Spam</strong>, <strong>Junk</strong> or <strong>Promotions</strong> tab, and mark it as "Not spam" so future emails reach you.</li>
+        <li><strong>Download within 72 hours.</strong> The link expires after that. Save the file to your device once it downloads.</li>
+      </ol>
+      <p class="fineprint">Make sure you used the email address you typed at checkout. Still nothing after 15 minutes? Email <a href="mailto:hello@learntern.co">hello@learntern.co</a> with your payment reference <span id="pay-ref"></span> and we will resend it right away.</p>
+    </div>
+    <div class="pay-actions"><a class="btn btn-gold" href="/blog/">Read the latest articles</a><a class="btn btn-outline" href="/">Back to home</a></div>
+  </div></div></section>` }));
+
 write("/account/", layout({
   path: "/account/", title: "Customer Account", desc: "Access your LearnTern purchases.",
   hero: pageHero("Account", "Customer account", "Access your purchases and downloads."),

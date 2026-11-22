@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     r = await fetch('https://api.paystack.co/transaction/initialize', {
       method: 'POST', headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, amount, currency: 'NGN', reference,
-        callback_url: `${siteUrl}/books/${p.slug}/?checkout=return`, metadata: { product: p.slug, name: clean(b.name, 120) } }),
+        callback_url: `${siteUrl}/payment-success/?product=${p.slug}`, cancel_action: `${siteUrl}/books/${p.slug}/?checkout=cancelled`, metadata: { product: p.slug, name: clean(b.name, 120) } }),
     });
     d = await r.json();
   } catch {

@@ -269,3 +269,19 @@ p{margin:0 0 1em}
 .mm-group a{padding-left:14px;border-bottom:0}
 @media(max-width:1280px){.nav-links{gap:2px}.nav-links a{padding:10px 12px}}
 .mobile-menu .btn{text-align:center}
+
+/* Payment success page */
+.pay-wrap{max-width:720px}
+.pay-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:40px 36px;text-align:center;box-shadow:0 12px 36px rgba(14,31,58,.07)}
+.pay-icon{width:72px;height:72px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;font-size:34px;background:#EDF6F1;color:#025834}
+.pay-card[data-state=checking] .pay-icon{background:#f1f3f7;color:#7a8aa3;animation:payPulse 1.2s ease-in-out infinite}
+.pay-card[data-state=failed] .pay-icon{background:#fdecea;color:#c14b43}.pay-card[data-state=failed] .pay-icon::before{content:"!"}.pay-card[data-state=failed] .pay-icon{font-size:0}.pay-card[data-state=failed] .pay-icon::before{font-size:34px}
+.pay-card[data-state=pending] .pay-icon{background:#fff6e0;color:#B8892B}
+@keyframes payPulse{50%{opacity:.45}}
+.pay-card h1{font-size:clamp(1.5rem,4vw,2rem);margin:0 0 10px}
+.pay-card .lead{margin:0 auto 26px;max-width:520px}
+.pay-steps{text-align:left;background:#F2F7F3;border-left:3px solid #025834;border-radius:10px;padding:22px 24px;margin:8px 0 26px}
+.pay-steps h2{font-size:1.05rem;margin:0 0 10px}.pay-steps ol{margin:0 0 12px;padding-left:20px}.pay-steps li{margin:0 0 10px;line-height:1.55}
+.pay-steps .fineprint{margin:0}
+.pay-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+@media(max-width:600px){.pay-card{padding:28px 18px}}
