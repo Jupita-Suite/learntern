@@ -6,13 +6,14 @@ export const looksAutomated = (b) => !(Number(b?._e) >= 1500);
 export const clean = (s, n = 2000) => String(s || '').trim().slice(0, n);
 
 // Sends email through Resend if RESEND_API_KEY is set. Returns true/false.
-export async function sendEmail({ to, subject, html, replyTo }) {
-  const key = process.env.RESEND_API_KEY, from = process.env.EMAIL_FROM;
+// Pass { newsletter: true } to send from NEWSLETTER_FROM (e.g. "LearnTern <updates@learntern.co>"); falls back to EMAIL_FROM.
+export async function sendEmail({ to, subject, html, replyTo, newsletter }) {
+  const key = process.env.RESEND_API_KEY, from = (newsletter && process.env.NEWSLETTER_FROM) || process.env.EMAIL_FROM;
   if (!key || !from) { console.error('sendEmail: RESEND_API_KEY or EMAIL_FROM missing in this deployment'); return false; }
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from, to, subject, html, reply_to: replyTo }),
+    body: JSON.stringify({ from, to, subject, html, reply_to: replyTo || (newsletter ? 'hello@learntern.co' : undefined) }),
   });
   if (!r.ok) console.error('sendEmail: Resend rejected the email', r.status, (await r.text().catch(() => '')).slice(0, 500));
   return r.ok;

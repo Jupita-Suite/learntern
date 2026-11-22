@@ -35,8 +35,10 @@ Subscribe boxes sit on the blog, every blog post, every Learn article and the ho
 To notify subscribers about a new post or article (after it is live):
 
 ```
-RESEND_API_KEY=... RESEND_AUDIENCE_ID=... EMAIL_FROM="LearnTern <hello@learntern.co>" node tools/notify.mjs <slug>          # creates a draft broadcast to review
-RESEND_API_KEY=... RESEND_AUDIENCE_ID=... EMAIL_FROM="LearnTern <hello@learntern.co>" node tools/notify.mjs <slug> --send   # sends it
+RESEND_API_KEY=... RESEND_AUDIENCE_ID=... NEWSLETTER_FROM="LearnTern <updates@learntern.co>" node tools/notify.mjs <slug>          # creates a draft broadcast to review
+RESEND_API_KEY=... RESEND_AUDIENCE_ID=... NEWSLETTER_FROM="LearnTern <updates@learntern.co>" node tools/notify.mjs <slug> --send   # sends it
 ```
 
 Every broadcast carries Resend's one-click unsubscribe link.
+
+Optional `NEWSLETTER_FROM` (e.g. `LearnTern <updates@learntern.co>`) is the sender for the welcome email and post notifications; replies go to hello@learntern.co. Order and contact emails keep using `EMAIL_FROM`. It must be an address on your Resend-verified domain.

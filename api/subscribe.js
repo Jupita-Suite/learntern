@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       if (!ok) return json(res, 502, { error: 'We could not send the email. Please try again.' });
       return json(res, 200, { message: 'Thank you! Your free guide has been emailed to you.' });
     }
-    if (b.intent !== 'course-waitlist') await sendEmail({ to: email, subject: 'You are subscribed to LearnTern updates',
+    if (b.intent !== 'course-waitlist') await sendEmail({ newsletter: true, to: email, subject: 'You are subscribed to LearnTern updates',
       html: `<p>Hi ${esc(firstName || 'there')},</p><p>Thanks for subscribing. We will email you when new credit risk articles and blog posts are published.</p><p>Browse the latest on the <a href="${esc(String(process.env.SITE_URL || site.url).replace(/\/+$/, ''))}/blog/">LearnTern blog</a>.</p><p>LearnTern</p>` });
     return json(res, 200, { message: 'You are subscribed. We will email you new posts and articles.' });
   } catch { return json(res, 500, { error: 'Something went wrong. Please try again.' }); }
