@@ -9,6 +9,52 @@ export const byline = "LearnTern Editorial";
 
 export const posts = [
   {
+    slug: "cbn-q3-credit-survey-demand-up-defaults-down",
+    title: "CBN's Q3 credit survey: demand is up and defaults are down, but borrowing is not getting cheaper",
+    category: "Credit Risk",
+    region: "Nigeria",
+    date: "2026-11-22",
+    readTime: 6,
+    excerpt: "Nigerian banks report more loan demand, more approvals and fewer defaults in the third quarter. Yet lending spreads widened and the cost of credit is still high. Here is how to read the signals.",
+    body: [
+      { p: "The Central Bank of Nigeria's Q3 2026 Credit Conditions Survey, reported by TVC News on 16 November, paints an encouraging picture: banks say demand for loans rose, they approved more of them, and borrowers defaulted less. A Nairametrics analysis published on 19 November adds a caution. Policy rate cuts have not made credit much cheaper for many borrowers. Together, the two reports are a good lesson in reading credit data carefully." },
+      { h: "What the survey reports" },
+      { ul: [
+        "Credit supply improved across secured, unsecured and corporate lending. Banks cited the economic outlook, liquidity, market share goals and risk appetite as reasons.",
+        "Household demand was led by consumer loans, which scored 42.9, the strongest increase. House purchase loans scored 28.0, overdrafts and personal loans 24.7, and mortgages 12.0. Credit cards (-20.0) and small businesses within household credit (-19.7) fell.",
+        "Corporate demand rose for small businesses (22.6), large private non-financial corporations (20.7) and medium-sized ones (18.3), mainly for inventory financing, balance sheet restructuring and capital investment. Commercial real estate was a negative contributor, and other financial corporations fell (-16.2).",
+        "Loan approvals rose against the previous quarter: 10.7 for secured, 10.5 for unsecured and 27.2 for corporate lending.",
+        "Default rates fell for secured and unsecured lending and across every corporate group in the survey.",
+      ] },
+      { note: "The figures above are survey index values, as TVC News reported them. The article does not explain how the index is built, so read them as direction and relative strength, not as percentages of loans or borrowers." },
+      { h: "The catch: pricing" },
+      { p: "The same survey says lending spreads over the Monetary Policy Rate widened for secured and corporate loans, and were unchanged for unsecured ones. So lenders are approving more while charging a larger margin over the policy rate." },
+      { p: "Nairametrics makes a broader point. It reports that the CBN lowered its policy rate from 27% to 23% over the year (50 basis points in February and 350 in September), yet the rate charged to the riskiest borrowers rose from 29.84% to 32.62%, and the prime rate barely moved, from 18.89% to 19.04%. In the week to 9 October, 32 banks reported 519 maximum lending rates ranging from roughly 19% to 46%. The author notes inflation has fallen from 20.98% to 14.63% over the year, which means real borrowing costs are still high." },
+      { h: "Why cheaper policy money does not always mean cheaper loans" },
+      { ul: [
+        "Pass-through is uneven. Nairametrics cites an IMF view that banks raise lending rates quickly when policy tightens and cut them slowly when it eases.",
+        "Credit risk is priced in, whatever the policy rate. The analysis points to weak contract enforcement, difficulty realising collateral, thin credit information and default risk.",
+        "Access remains narrow. It reports that only about one in 25 small and medium enterprises has a bank loan.",
+        "Uncertainty about future rates makes businesses delay long-term investment even when a loan is available.",
+      ] },
+      { h: "A related signal from bank earnings" },
+      { p: "BusinessDay reported on 18 November that Nigerian banks cut impairment charges by 47.1% to ₦1.01 trillion in the first nine months of 2026, under a headline arguing the drop offers little relief to borrowers. The full article is behind a paywall, so we have used only the summary figure. Lower impairment charges free up earnings, but they do not by themselves lower what customers pay." },
+      { h: "What credit professionals should take from this" },
+      { ul: [
+        "Do not read falling defaults as a permanent trend from one survey. Check them against non-performing loan ratios, stage 2 balances and restructured loans when those are published.",
+        "Falling defaults alongside wider spreads can mean lenders are being selective and charging for risk. Ask who is getting the loans.",
+        "Watch the consumer segment. The fastest demand growth is in household consumer loans, which is where affordability and over-indebtedness risks can build quietly. Credit bureau data helps here.",
+        "Check sector concentration. Corporate demand is tied to inventory and restructuring needs, while commercial real estate is weak.",
+        "Model the pricing path. A borrower's repayment capacity depends on the rate they actually pay, not the policy rate in the headlines.",
+      ] },
+    ],
+    sources: [
+      { title: "CBN Survey: Nigerian Banks Report Higher Credit Demand, Fewer Loan Defaults In Q3 2026 (TVC News)", url: "https://www.tvcnews.tv/cbn-survey-nigerian-banks-report-higher-credit-demand-fewer-loan-defaults-in-q3-2026/" },
+      { title: "Why CBN's rate cuts haven't lowered the real price of credit (Nairametrics)", url: "https://nairametrics.com/2026/11/19/why-cbns-rate-cuts-havent-lowered-the-real-price-of-credit" },
+      { title: "Banks' 47% drop in bad-loan charges offers little relief to borrowers (BusinessDay)", url: "https://businessday.ng/business-economy/article/banks-47-drop-in-bad-loan-charges-offers-little-relief-to-borrowers/" },
+    ],
+  },
+  {
     slug: "africa-credit-rating-agency-afcra-what-it-means",
     title: "Africa's new credit rating agency: what AfCRA could change for borrowers and lenders",
     category: "Markets",

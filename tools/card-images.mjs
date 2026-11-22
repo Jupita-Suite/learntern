@@ -92,6 +92,7 @@ export const cards = {
   "nigerian-banks-recapitalised-who-gets-the-credit": "bank",
   "imf-october-2026-stability-report-credit-risk-takeaways": "globe",
   "africa-credit-rating-agency-afcra-what-it-means": "rating",
+  "cbn-q3-credit-survey-demand-up-defaults-down": "portfolio",
 };
 
 // Zoom per motif so each fills the card (wide motifs stay at 1).
