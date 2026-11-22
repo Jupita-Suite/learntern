@@ -93,6 +93,7 @@ export const cards = {
   "imf-october-2026-stability-report-credit-risk-takeaways": "globe",
   "africa-credit-rating-agency-afcra-what-it-means": "rating",
   "cbn-q3-credit-survey-demand-up-defaults-down": "portfolio",
+  "credit-risk-skills-to-stay-relevant-in-2027": "career",
 };
 
 // Zoom per motif so each fills the card (wide motifs stay at 1).
