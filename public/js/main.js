@@ -126,15 +126,15 @@
   function open(){
     close();
     var c=read()||{ads:false,analytics:false},b=document.createElement('div');b.id='cc';b.className='cc';b.setAttribute('role','dialog');b.setAttribute('aria-label','Cookie preferences');
-    b.innerHTML='<div class="cc-main"><p class="cc-title">We value your privacy</p><p class="cc-text">LearnTern uses cookies to keep the site working, understand how it is used, and show ads that help fund our free articles. You can accept all, reject the optional ones, or choose. See our <a href="/cookie-policy/">Cookie Policy</a> and <a href="/privacy-policy/">Privacy Policy</a>.</p>'+
+    b.innerHTML='<div class="cc-main"><p class="cc-title">We value your privacy</p><p class="cc-text">LearnTern uses cookies to keep the site working, understand how it is used, and show ads that help fund our free articles. You can accept all or set your preferences. See our <a href="/cookie-policy/">Cookie Policy</a> and <a href="/privacy-policy/">Privacy Policy</a>.</p>'+
       '<div class="cc-opts" hidden><label><input type="checkbox" checked disabled> <span><strong>Necessary</strong> Always on. Needed for the site and secure checkout.</span></label>'+
       '<label><input type="checkbox" id="cc-an"'+(c.analytics?' checked':'')+'> <span><strong>Analytics</strong> Helps us see which pages are useful.</span></label>'+
       '<label><input type="checkbox" id="cc-ad"'+(c.ads?' checked':'')+'> <span><strong>Advertising</strong> Lets Google show and measure ads on our blog and articles.</span></label></div></div>'+
-      '<div class="cc-btns"><button type="button" class="btn btn-gold btn-sm" data-cc="all">Accept all</button><button type="button" class="btn btn-outline btn-sm" data-cc="none">Reject</button><button type="button" class="cc-link" data-cc="custom">Choose</button></div>';
+      '<div class="cc-btns"><button type="button" class="btn btn-gold btn-sm" data-cc="all">Accept all</button><button type="button" class="btn btn-outline btn-sm" data-cc="custom">Preferences</button></div>';
     document.body.appendChild(b);
     var opts=b.querySelector('.cc-opts');
     b.addEventListener('click',function(e){var t=e.target.closest('[data-cc]');if(!t)return;var a=t.getAttribute('data-cc');
-      if(a==='custom'){if(opts.hidden){opts.hidden=false;t.textContent='Save choices';t.className='btn btn-navy btn-sm';return}
+      if(a==='custom'){if(opts.hidden){opts.hidden=false;t.textContent='Save preferences';t.className='btn btn-navy btn-sm';return}
         var v={analytics:b.querySelector('#cc-an').checked,ads:b.querySelector('#cc-ad').checked};save(v);apply(v);close();return}
       var v2=a==='all'?{analytics:true,ads:true}:{analytics:false,ads:false};save(v2);apply(v2);close();if(a==='none')location.reload&&0});
     var f=b.querySelector('button');if(f&&!read())try{f.focus({preventScroll:true})}catch(e){}
