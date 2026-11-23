@@ -99,7 +99,8 @@ export const cookiePolicy = [
     ] },
   ] },
   { h: "4. Managing cookies", body: [
-    { p: "You can block or delete cookies in your browser settings. Blocking some cookies may affect parts of third-party services such as checkout. You can also opt out of Google's personalised advertising at adssettings.google.com." },
+    { p: "When you first visit, a banner lets you accept all optional cookies, reject them, or choose between analytics and advertising. Analytics and advertising scripts only load after you agree. Your choice is saved in your browser, and you can change it at any time with the \"Cookie settings\" link in the footer of every page." },
+    { p: "You can also block or delete cookies in your browser settings. Blocking some cookies may affect parts of third-party services such as checkout. You can also opt out of Google's personalised advertising at adssettings.google.com." },
   ] },
   { h: "5. Changes and contact", body: [
     { p: "We will update this policy if we start using new cookies or tools. Questions? Email hello@learntern.co. See also our Privacy Policy." },

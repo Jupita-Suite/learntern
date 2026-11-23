@@ -285,3 +285,13 @@ p{margin:0 0 1em}
 .pay-steps .fineprint{margin:0}
 .pay-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 @media(max-width:600px){.pay-card{padding:28px 18px}}
+
+/* Cookie consent */
+html:not(.ads-on) .ad-adsense{display:none}
+.linklike{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}.linklike:hover{text-decoration:underline}
+.cc{position:fixed;left:16px;right:16px;bottom:16px;max-width:880px;margin:0 auto;z-index:200;background:#fff;color:#142B4D;border:1px solid #E3E7EE;border-radius:16px;box-shadow:0 18px 50px rgba(14,31,58,.22);padding:18px 20px;display:flex;gap:18px;align-items:center;justify-content:space-between}
+.cc-main{flex:1;min-width:0}.cc-title{font-weight:700;margin:0 0 4px}.cc-text{margin:0;font-size:.9rem;line-height:1.5;color:#44546d}.cc-text a{text-decoration:underline}
+.cc-opts{display:grid;gap:10px;margin-top:12px}.cc-opts[hidden]{display:none}.cc-opts label{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;line-height:1.45}.cc-opts input{margin-top:3px}.cc-opts strong{display:block}
+.cc-btns{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.cc-link{background:none;border:0;color:#142B4D;text-decoration:underline;font:600 .88rem inherit;cursor:pointer;padding:6px}
+@media(max-width:700px){.cc{flex-direction:column;align-items:stretch;left:10px;right:10px;bottom:10px;padding:16px;max-height:80vh;overflow:auto}.cc-btns{justify-content:stretch}.cc-btns .btn{flex:1;text-align:center}}

@@ -104,3 +104,41 @@
     render();
   }
 })();
+
+// Cookie consent: ads (Google AdSense) and analytics (Google Analytics / Tag Manager) only load after the visitor agrees.
+(function(){
+  var KEY='lt_consent_v1',root=document.documentElement;
+  function meta(n){var m=document.querySelector('meta[name="'+n+'"]');return m?m.content:''}
+  function read(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){return null}}
+  function save(c){c.t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(c))}catch(e){}}
+  var loaded={};
+  function load(src,id){if(loaded[id])return;loaded[id]=1;var s=document.createElement('script');s.async=true;s.src=src;if(id==='ads')s.crossOrigin='anonymous';document.head.appendChild(s)}
+  function apply(c){
+    if(c&&c.ads){var cl=meta('lt-adsense');if(cl){root.classList.add('ads-on');load('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+encodeURIComponent(cl),'ads')}}
+    else root.classList.remove('ads-on');
+    if(c&&c.analytics){
+      var gtm=meta('lt-gtm'),ga=meta('lt-ga');window.dataLayer=window.dataLayer||[];
+      if(gtm&&!loaded.gtm){loaded.gtm=1;window.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});load('https://www.googletagmanager.com/gtm.js?id='+encodeURIComponent(gtm),'gtm-js')}
+      else if(ga&&!loaded.ga){loaded.ga=1;window.gtag=function(){window.dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config',ga);load('https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(ga),'ga-js')}
+    }
+  }
+  function close(){var b=document.getElementById('cc');if(b)b.remove()}
+  function open(){
+    close();
+    var c=read()||{ads:false,analytics:false},b=document.createElement('div');b.id='cc';b.className='cc';b.setAttribute('role','dialog');b.setAttribute('aria-label','Cookie preferences');
+    b.innerHTML='<div class="cc-main"><p class="cc-title">We value your privacy</p><p class="cc-text">LearnTern uses cookies to keep the site working, understand how it is used, and show ads that help fund our free articles. You can accept all, reject the optional ones, or choose. See our <a href="/cookie-policy/">Cookie Policy</a> and <a href="/privacy-policy/">Privacy Policy</a>.</p>'+
+      '<div class="cc-opts" hidden><label><input type="checkbox" checked disabled> <span><strong>Necessary</strong> Always on. Needed for the site and secure checkout.</span></label>'+
+      '<label><input type="checkbox" id="cc-an"'+(c.analytics?' checked':'')+'> <span><strong>Analytics</strong> Helps us see which pages are useful.</span></label>'+
+      '<label><input type="checkbox" id="cc-ad"'+(c.ads?' checked':'')+'> <span><strong>Advertising</strong> Lets Google show and measure ads on our blog and articles.</span></label></div></div>'+
+      '<div class="cc-btns"><button type="button" class="btn btn-gold btn-sm" data-cc="all">Accept all</button><button type="button" class="btn btn-outline btn-sm" data-cc="none">Reject optional</button><button type="button" class="cc-link" data-cc="custom">Choose</button></div>';
+    document.body.appendChild(b);
+    var opts=b.querySelector('.cc-opts');
+    b.addEventListener('click',function(e){var t=e.target.closest('[data-cc]');if(!t)return;var a=t.getAttribute('data-cc');
+      if(a==='custom'){if(opts.hidden){opts.hidden=false;t.textContent='Save choices';t.className='btn btn-navy btn-sm';return}
+        var v={analytics:b.querySelector('#cc-an').checked,ads:b.querySelector('#cc-ad').checked};save(v);apply(v);close();return}
+      var v2=a==='all'?{analytics:true,ads:true}:{analytics:false,ads:false};save(v2);apply(v2);close();if(a==='none')location.reload&&0});
+    var f=b.querySelector('button');if(f&&!read())try{f.focus({preventScroll:true})}catch(e){}
+  }
+  var saved=read();apply(saved);if(!saved)open();
+  document.addEventListener('click',function(e){if(e.target.closest('[data-cookie-settings]')){e.preventDefault();open()}});
+})();
