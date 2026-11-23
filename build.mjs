@@ -97,8 +97,7 @@ function layout({ path, title, desc, body, og = "website", schema = [], hero = "
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jost:wght@600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css">
 ${ld.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join("\n")}
-${site.gtmId ? `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${site.gtmId}');</script>` : ""}
-${!site.gtmId && site.gaId ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${site.gaId}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${site.gaId}');</script>` : ""}
+${site.gtmId ? `<meta name="lt-gtm" content="${site.gtmId}">` : ""}${!site.gtmId && site.gaId ? `<meta name="lt-ga" content="${site.gaId}">` : ""}
 ${head}</head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap"><div class="nav">${logo}
@@ -114,7 +113,7 @@ ${head}</head><body>
 <div class="social" aria-label="Social media">${[["linkedin", "in"], ["x", "X"], ["instagram", "ig"], ["youtube", "yt"]].map(([k, t]) => `<a href="${site.social[k]}" aria-label="LearnTern on ${k}" rel="noopener">${t}</a>`).join("")}</div></div>
 <div><h4>Platform</h4><ul><li><a href="/about/">About LearnTern</a></li><li><a href="/learn/">Learn</a></li><li><a href="/blog/">Blog</a></li><li><a href="/books/">Books &amp; Resources</a></li><li><a href="/interview-preparation/">Interview Preparation</a></li><li><a href="/courses/">Courses</a></li></ul></div>
 <div><h4>Business</h4><ul><li><a href="/corporate-training/">Corporate Training</a></li><li><a href="/advertise/">Advertise with us</a></li><li><a href="/contact/">Contact</a></li><li><a href="/account/">Customer Account</a></li></ul></div>
-<div><h4>Legal</h4><ul><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/cookie-policy/">Cookie Policy</a></li><li><a href="/terms/">Terms and Conditions</a></li><li><a href="/refund-policy/">Refund Policy</a></li></ul></div>
+<div><h4>Legal</h4><ul><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/cookie-policy/">Cookie Policy</a></li><li><button type="button" class="linklike" data-cookie-settings>Cookie settings</button></li><li><a href="/terms/">Terms and Conditions</a></li><li><a href="/refund-policy/">Refund Policy</a></li></ul></div>
 </div><div class="foot-bottom"><span>© ${new Date().getFullYear()} LearnTern. All rights reserved.</span><span>Educational content only. Not financial, legal or regulatory advice.</span></div></div></footer>
 <script src="/js/main.js" defer></script></body></html>`;
 }
@@ -141,12 +140,12 @@ function adSlot(slot) {
   const a = adFor(slot);
   if (a) return `<aside class="ad" aria-label="Sponsored advertisement"><span class="ad-label">Sponsored</span><a class="ad-img" href="${esc(a.href)}" target="_blank" rel="sponsored noopener noreferrer" data-ad="${esc(a.id)}"><img src="${esc(a.image)}" alt="${esc(a.alt)}" width="${a.width}" height="${a.height}" loading="lazy"></a>${adNote}</aside>`;
   if (slot === "article-end" && adsense.client && adsense.slot)
-    return `<aside class="ad" aria-label="Advertisement"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(adsense.client)}" data-ad-slot="${esc(adsense.slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>`;
+    return `<aside class="ad ad-adsense" aria-label="Advertisement"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(adsense.client)}" data-ad-slot="${esc(adsense.slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>`;
   if (slot === "article-end")
     return `<aside class="ad ad-house" aria-label="Advertise with LearnTern"><span class="ad-label">Advertise</span><h3>Reach credit, risk and banking professionals</h3><p>Put your brand in front of LearnTern readers.</p><a class="btn btn-navy btn-sm" href="/advertise/">Advertise with LearnTern</a></aside>`;
   return "";
 }
-const adsenseHead = adsense.client ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${esc(adsense.client)}" crossorigin="anonymous"></script>` : "";
+const adsenseHead = adsense.client ? `<meta name="lt-adsense" content="${esc(adsense.client)}">` : "";
 
 const subBox = (src, h = "Get new posts and articles by email", p = "New credit risk articles and blog posts, straight to your inbox. No spam, unsubscribe any time.") => `<aside class="sub-box"><div><h3>${h}</h3><p>${p}</p></div>
   <form class="form" data-endpoint="/api/subscribe" data-source="${src}" novalidate><input type="hidden" name="intent" value="updates">
