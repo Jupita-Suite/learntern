@@ -90,6 +90,7 @@ function layout({ path, title, desc, body, og = "website", schema = [], hero = "
 <title>${esc(full)}</title><meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${canonical}">${noindex ? '<meta name="robots" content="noindex">' : ""}
 <meta property="og:site_name" content="LearnTern"><meta property="og:type" content="${og}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${site.url}${image || "/assets/credit-risk-101.webp"}">
+<meta name="google-adsense-account" content="ca-pub-3520403050205272">
 <meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#142B4D">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
