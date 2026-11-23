@@ -133,6 +133,21 @@ const leadForm = (src, label = "Get the Free Guide") => `<form class="form" data
   <button class="btn btn-gold" type="submit">${label}</button><p class="form-msg" role="status" aria-live="polite"></p>
   <p class="fineprint" style="color:#9fb0c9">We use your details to send the guide and occasional learning updates. Unsubscribe any time.</p></form>`;
 
+/* ---------- ADS ---------- */
+const today0 = new Date().toISOString().slice(0, 10);
+const adFor = (slot) => ads.find((a) => a.placements.includes(slot) && a.start <= today0 && (!a.end || today0 <= a.end));
+const adNote = `<p class="ad-note">Advertiser content. LearnTern does not provide, arrange or endorse loans or other products shown here. Check that any lender is registered before you borrow. <a href="/advertise/">Advertise with us</a></p>`;
+function adSlot(slot) {
+  const a = adFor(slot);
+  if (a) return `<aside class="ad" aria-label="Sponsored advertisement"><span class="ad-label">Sponsored</span><a class="ad-img" href="${esc(a.href)}" target="_blank" rel="sponsored noopener noreferrer" data-ad="${esc(a.id)}"><img src="${esc(a.image)}" alt="${esc(a.alt)}" width="${a.width}" height="${a.height}" loading="lazy"></a>${adNote}</aside>`;
+  if (slot === "article-end" && adsense.client && adsense.slot)
+    return `<aside class="ad" aria-label="Advertisement"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(adsense.client)}" data-ad-slot="${esc(adsense.slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>`;
+  if (slot === "article-end")
+    return `<aside class="ad ad-house" aria-label="Advertise with LearnTern"><span class="ad-label">Advertise</span><h3>Reach credit, risk and banking professionals</h3><p>Put your brand in front of LearnTern readers.</p><a class="btn btn-navy btn-sm" href="/advertise/">Advertise with LearnTern</a></aside>`;
+  return "";
+}
+const adsenseHead = adsense.client ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${esc(adsense.client)}" crossorigin="anonymous"></script>` : "";
+
 const subBox = (src, h = "Get new posts and articles by email", p = "New credit risk articles and blog posts, straight to your inbox. No spam, unsubscribe any time.") => `<aside class="sub-box"><div><h3>${h}</h3><p>${p}</p></div>
   <form class="form" data-endpoint="/api/subscribe" data-source="${src}" novalidate><input type="hidden" name="intent" value="updates">
   <div class="inline"><div class="field" style="flex:1"><label for="sb-${src}" class="sr-only">Email address</label><input id="sb-${src}" name="email" type="email" placeholder="Your email address" required autocomplete="email"></div><button class="btn btn-gold" type="submit">Notify me</button></div>
@@ -209,14 +224,14 @@ write("/", layout({ path: "/", title: "LearnTern | Practical Credit Risk Educati
 /* ---------- LEARN ---------- */
 const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
 write("/learn/", layout({
-  path: "/learn/", title: "Learn: Credit Risk Articles and Guides", desc: "Searchable library of practical articles on credit risk, credit analysis, loan underwriting, portfolio monitoring and credit careers.",
+  head: adsenseHead, path: "/learn/", title: "Learn: Credit Risk Articles and Guides", desc: "Searchable library of practical articles on credit risk, credit analysis, loan underwriting, portfolio monitoring and credit careers.",
   hero: pageHero("Learn", "Credit Risk Learning Library", "Practical articles on credit analysis, underwriting, portfolio monitoring and building a career in lending."),
   body: `<section class="section"><div class="wrap">
   <div class="toolbar"><div class="search"><label for="q" class="sr" style="position:absolute;left:-999px">Search articles</label><input id="q" type="search" placeholder="Search articles, e.g. cash flow, PAR, scorecards" autocomplete="off"></div></div>
   <div class="chips" role="group" aria-label="Filter by category"><button class="chip" data-cat="All" aria-pressed="true">All</button>${categories.map((c) => `<button class="chip" data-cat="${esc(c)}" aria-pressed="false">${c}</button>`).join("")}</div>
   <div id="library" class="grid g3">${sorted.map(articleCard).join("")}</div>
   <div id="empty" class="empty"><h3>No articles match your search</h3><p>Try a different keyword or choose another category. New articles are published regularly.</p></div>
-  <div id="pager" class="pager"></div></div></section>`,
+  <div id="pager" class="pager"></div>${adSlot("article-end")}</div></section>`,
 }));
 
 /* ---------- ARTICLES ---------- */
@@ -224,10 +239,11 @@ for (const a of articles) {
   const related = articles.filter((x) => x.slug !== a.slug && x.category === a.category).concat(articles.filter((x) => x.slug !== a.slug && x.category !== a.category)).slice(0, 3);
   const body = a.body.map((b) => (b.h ? `<h2>${esc(b.h)}</h2>` : b.p ? `<p>${esc(b.p)}</p>` : `<ul>${b.ul.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`)).join("");
   write(`/learn/${a.slug}/`, layout({
-    path: `/learn/${a.slug}/`, title: a.title, desc: a.excerpt, og: "article", image: cardImg(a.slug),
+    path: `/learn/${a.slug}/`, title: a.title, desc: a.excerpt, og: "article", head: adsenseHead, image: cardImg(a.slug),
     schema: [{ "@context": "https://schema.org", "@type": "Article", headline: a.title, description: a.excerpt, datePublished: a.date, author: { "@type": "Person", name: "Williams Adeyemi" }, publisher: { "@type": "Organization", name: "LearnTern" }, mainEntityOfPage: site.url + `/learn/${a.slug}/` }],
     hero: `<section class="page-hero"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / <a href="/learn/">Learn</a> / ${esc(a.category)}</div><span class="eyebrow">${esc(a.category)}</span><h1 style="max-width:20ch">${esc(a.title)}</h1><div class="article-meta"><span>${fmtDate(a.date)}</span><span>${a.readTime} min read</span><span>By Williams Adeyemi</span></div></div></section>`,
     body: `<section class="section"><div class="wrap"><div class="article">${body}
+    ${adSlot("article-end")}
     ${subBox("learn-article")}
     <div class="callout"><p><strong>Build on this with the book.</strong> Credit Risk 101 walks through these ideas with practical examples for the Nigerian lending market.</p><a class="btn btn-navy btn-sm" href="/books/credit-risk-101/">Explore Credit Risk 101</a></div>
     <p class="fineprint">This article is for general education and does not constitute financial, legal or regulatory advice. Definitions and regulatory thresholds vary by institution and change over time; always confirm current requirements.</p></div></div></section>
@@ -379,21 +395,6 @@ legal("/privacy-policy/", "Privacy Policy", "How LearnTern collects, uses and pr
 legal("/cookie-policy/", "Cookie Policy", "How LearnTern and its partners use cookies and similar technologies, and how to manage them.", cookiePolicy);
 legal("/terms/", "Terms and Conditions", "The terms that apply when you use LearnTern or buy our digital products.", terms);
 
-/* ---------- ADS ---------- */
-const today0 = new Date().toISOString().slice(0, 10);
-const adFor = (slot) => ads.find((a) => a.placements.includes(slot) && a.start <= today0 && (!a.end || today0 <= a.end));
-const adNote = `<p class="ad-note">Advertiser content. LearnTern does not provide, arrange or endorse loans or other products shown here. Check that any lender is registered before you borrow. <a href="/advertise/">Advertise with us</a></p>`;
-function adSlot(slot) {
-  const a = adFor(slot);
-  if (a) return `<aside class="ad" aria-label="Sponsored advertisement"><span class="ad-label">Sponsored</span><a class="ad-img" href="${esc(a.href)}" target="_blank" rel="sponsored noopener noreferrer" data-ad="${esc(a.id)}"><img src="${esc(a.image)}" alt="${esc(a.alt)}" width="${a.width}" height="${a.height}" loading="lazy"></a>${adNote}</aside>`;
-  if (slot === "article-end" && adsense.client && adsense.slot)
-    return `<aside class="ad" aria-label="Advertisement"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(adsense.client)}" data-ad-slot="${esc(adsense.slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>`;
-  if (slot === "article-end")
-    return `<aside class="ad ad-house" aria-label="Advertise with LearnTern"><span class="ad-label">Advertise</span><h3>Reach credit, risk and banking professionals</h3><p>Put your brand in front of LearnTern readers.</p><a class="btn btn-navy btn-sm" href="/advertise/">Advertise with LearnTern</a></aside>`;
-  return "";
-}
-const adsenseHead = adsense.client ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${esc(adsense.client)}" crossorigin="anonymous"></script>` : "";
-
 /* ---------- BLOG ---------- */
 const sortedPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date));
 const blogCard = (a) => `<article class="card" data-title="${esc(a.title)}" data-excerpt="${esc(a.excerpt)}" data-cat="${esc(a.region)}">
@@ -409,6 +410,7 @@ write("/blog/", layout({
   <div id="library" class="grid g3">${sortedPosts.map(blogCard).join("")}</div>
   <div id="empty" class="empty"><h3>No posts match your search</h3><p>Try a different keyword or region. New posts are published regularly.</p></div>
   <div id="pager" class="pager"></div>
+  ${adSlot("article-end")}
   ${subBox("blog-index")}
   <p class="fineprint" style="margin-top:28px"><a href="/blog/rss.xml">RSS feed</a> · Want to reach our readers? <a href="/advertise/">Advertise with us</a></p></div></section>`,
 }));

@@ -26,6 +26,6 @@ export const ads = [
 // Needs an approved AdSense account, a live privacy policy and cookie/consent handling first.
 // When on, AdSense fills the article-end slot; direct ads above always take priority in their own slots.
 export const adsense = {
-  client: process.env.ADSENSE_CLIENT || "",
-  slot: process.env.ADSENSE_SLOT || "",
+  client: process.env.ADSENSE_CLIENT || "ca-pub-3520403050205272",
+  slot: process.env.ADSENSE_SLOT || "2040874709", // ad unit "Allround" (responsive, auto format)
 };
