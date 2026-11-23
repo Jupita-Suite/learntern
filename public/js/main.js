@@ -130,7 +130,7 @@
       '<div class="cc-opts" hidden><label><input type="checkbox" checked disabled> <span><strong>Necessary</strong> Always on. Needed for the site and secure checkout.</span></label>'+
       '<label><input type="checkbox" id="cc-an"'+(c.analytics?' checked':'')+'> <span><strong>Analytics</strong> Helps us see which pages are useful.</span></label>'+
       '<label><input type="checkbox" id="cc-ad"'+(c.ads?' checked':'')+'> <span><strong>Advertising</strong> Lets Google show and measure ads on our blog and articles.</span></label></div></div>'+
-      '<div class="cc-btns"><button type="button" class="btn btn-gold btn-sm" data-cc="all">Accept all</button><button type="button" class="btn btn-outline btn-sm" data-cc="none">Reject optional</button><button type="button" class="cc-link" data-cc="custom">Choose</button></div>';
+      '<div class="cc-btns"><button type="button" class="btn btn-gold btn-sm" data-cc="all">Accept all</button><button type="button" class="btn btn-outline btn-sm" data-cc="none">Reject</button><button type="button" class="cc-link" data-cc="custom">Choose</button></div>';
     document.body.appendChild(b);
     var opts=b.querySelector('.cc-opts');
     b.addEventListener('click',function(e){var t=e.target.closest('[data-cc]');if(!t)return;var a=t.getAttribute('data-cc');
