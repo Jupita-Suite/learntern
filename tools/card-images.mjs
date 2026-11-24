@@ -95,6 +95,7 @@ export const cards = {
   "cbn-q3-credit-survey-demand-up-defaults-down": "portfolio",
   "credit-risk-skills-to-stay-relevant-in-2027": "career",
   "ai-decisions-vs-human-judgment-in-credit-risk": "fiveC",
+  "underwriting-traps-the-loan-that-looked-perfect": "warning",
 };
 
 // Zoom per motif so each fills the card (wide motifs stay at 1).
